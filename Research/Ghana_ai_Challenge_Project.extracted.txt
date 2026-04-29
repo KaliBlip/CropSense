@@ -1,0 +1,147 @@
+AI-Powered Crop Pest &amp; Disease Detection System
+Ghana AI Innovation Challenge 2026  |  Agriculture Domain
+Kumasi Technical University  •  Departments of Data Science, Computer Science, Mechanical &amp; Electrical/Electronics Engineering
+1. Problem Statement &amp; Objectives
+Ghana's agricultural sector employs over 40% of the population, yet smallholder farmers continue to suffer severe crop losses due to pests and diseases. Cashew, cassava, maize, and tomato — four of Ghana's most cultivated crops — are particularly vulnerable to a wide range of infestations including fall armyworm, mosaic virus, bacterial blight, and leaf blight. Early detection is critical, but most farmers lack access to trained agronomists, and the knowledge gap between technology and rural practitioners remains wide.
+
+This project aims to:
+Build an AI-powered mobile application that enables farmers to detect crop pests and diseases in real time using their smartphone cameras
+Develop a low-cost embedded scouting device for farmers without smartphones, using a Raspberry Pi with a camera module housed in a 3D-printed casing
+Deploy both solutions offline, ensuring usability in rural areas with limited internet connectivity
+Provide actionable treatment recommendations immediately following a diagnosis
+
+2. Dataset Description
+The primary dataset used in this project is the Dataset for Crop Pest and Disease Detection (Mendeley Data, DOI: 10.17632/bwh3zbpkpv.1), published by researchers at the University of Energy and Natural Resources, Ghana.
+
+Crop
+Cashew
+Cassava
+Maize
+Tomato
+Images
+6,549
+7,508
+5,389
+5,435
+Classes
+5
+5
+7
+5
+Example Classes
+Anthracnose, Gummosis, 
+Leaf miner, 
+Red rust
+Mosaic, 
+Bacterial blight, Brown spot, 
+Green mite
+Fall armyworm, Streak virus, 
+Leaf beetle, 
+Leaf blight
+Leaf curl, Septoria leaf spot, Verticillium wilt
+
+Total dataset: 24,881 raw images (+ 102,976 augmented images split into train/test sets), validated by expert plant virologists, licensed CC BY 4.0.
+
+3. Methodology &amp; AI/ML Techniques
+3.1 Shared AI Model
+Both deliverables (mobile app and embedded device) share a single trained model, ensuring development efficiency and consistent performance across deployment platforms.
+Architecture: MobileNetV2 or EfficientNet-Lite (selected after benchmarking for accuracy vs. inference speed trade-off)
+Framework: TensorFlow / Keras for training; TensorFlow Lite for on-device deployment
+Training: Transfer learning from ImageNet pretrained weights, fine-tuned on the Ghana crop dataset
+Data augmentation: Rotation, flipping, brightness/contrast variation to improve model robustness
+Output: 22-class softmax classifier covering all crop-pest/disease combinations
+
+3.2 Project 1 — Mobile Diagnosis App
+Platform: C# .Net Maui (cross-platform Android/iOS)
+Model deployed as a .tflite file bundled within the app — no internet required
+Farmer captures or uploads a leaf photo; model runs inference on-device in under 2 seconds
+Results screen shows: detected disease/pest name, confidence score, and a simple treatment recommendation
+Supports Twi and English UI labels for local accessibility
+
+3.3 Project 2 — Embedded Scouting Device
+Hardware: Raspberry Pi Zero 2W + OV5647 camera module
+Enclosure: Custom 3D-printed casing designed in CAD (Fusion 360), optimised for field use
+Output: 2-inch LCD display showing disease name + a colour-coded severity LED indicator
+Power: Rechargeable Li-Po battery pack; estimated 6-hour field runtime
+Firmware: Python-based inference pipeline using TFLite Runtime
+No smartphone or internet connectivity required — fully standalone
+
+4. Preliminary Results &amp; Key Findings
+Baseline model experiments on the augmented dataset have produced the following early-stage results:
+
+Model
+Expt. Accuracy
+Inference (mobile)
+Size (MB)
+MobileNetV2 (baseline)
+91.4%
+~85ms
+14
+EfficientNet-Lite0
+93.1%
+~110ms
+19
+EfficientNet-Lite2 (target)
+95.2%*
+~180ms
+29
+
+* Target accuracy with full fine-tuning on complete dataset. All results on the 22-class augmented test set.
+
+Key findings so far:
+Maize disease classes (especially fall armyworm vs. leaf blight) show the highest inter-class confusion — targeted augmentation is planned
+MobileNetV2 offers the best balance of accuracy and inference speed for embedded deployment
+Healthy class precision exceeds 97% across all four crops, reducing false alarms for farmers
+
+5. Potential Impact &amp; Relevance
+Ghana loses an estimated 30–40% of annual crop yields to preventable pest and disease outbreaks. Early detection, which currently depends on expensive agronomist visits, is out of reach for most smallholder farmers. This system directly addresses that gap by placing diagnostic capability in the hands of farmers at zero recurring cost.
+
+The mobile app targets the estimated 14 million smartphone users in Ghana, requiring no data connection in the field
+The embedded device extends reach to farmers without smartphones — particularly in Northern and rural Ashanti regions
+Both tools align with Ghana's MoFA digitisation agenda and the National AI Strategy's focus on agriculture
+A single trained model serving two form factors demonstrates clear scalability and cost-efficiency
+Potential for integration with the Esoko and AgroCenta platforms already serving Ghanaian smallholder farmers
+
+6. Team Composition
+
+Role
+Discipline
+Institution
+Contribution
+Status
+Lead / Data Scientist (F)
+Data Science
+Kumasi Technical University
+Model training, evaluation
+Student
+Software Developer (M)
+Computer Science
+Independent
+Mobile app, firmware
+Professional (7 yrs)
+Electronics Engineer (M)
+Electrical &amp; Electronics
+Kumasi Technical University
+Hardware, power design
+Student
+CAD / Prototyping (M)
+Mechanical Engineering
+Kumasi Technical University
+Device enclosure, 3D print
+Student
+
+(F) = Female  •  (M) = Male. Team spans Kumasi and Accra regions.
+
+Team Diversity Note:
+The team combines Data Science, Computer Science, Mechanical Engineering, and Electrical &amp; Electronics Engineering — ensuring both research rigour and practical prototyping capability. The team includes a female lead data scientist, blends student and professional experience, and represents two regions of Ghana (Ashanti and Greater Accra).
+
+7. Repository &amp; Reproducibility
+All code, model weights, training notebooks, and firmware will be published on a public GitHub repository prior to the submission deadline. The repository will include:
+Model training pipeline (Python / TensorFlow)
+TFLite conversion and quantisation scripts
+.Net Maui mobile application source code
+Raspberry Pi firmware and inference scripts
+CAD files for the device enclosure (.STL / Fusion 360)
+Dataset preprocessing and augmentation scripts
+
+Data handling complies with CC BY 4.0 licence terms. No personal data is collected by either application.

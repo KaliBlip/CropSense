@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CropSense.Views.HomePage"
+             Shell.NavBarIsVisible="False"
+             Title="Home">
+
+    <Grid Padding="10"
+          RowSpacing="10">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0"
+              Padding="10"
+              BackgroundColor="#202020">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0"
+                    StrokeShape="RoundRectangle 50"
+                    Padding="14"
+                    BackgroundColor="#202820">
+                    <Border.StrokeThickness>0</Border.StrokeThickness>
+                <Grid ColumnDefinitions="Auto, *, Auto"
+                        ColumnSpacing="5">
+                    <Image Source="dotnet_bot.png"
+                           Grid.Column="0"
+                           WidthRequest="50"
+                           HeightRequest="50"
+                           Aspect="AspectFill">
+                        <Image.Clip>
+                            <EllipseGeometry Center="25,25" RadiusX="25" RadiusY="25" />
+                        </Image.Clip>
+                    </Image>
+                    <VerticalStackLayout Grid.Column="1"
+                                         Spacing="2">
+                        <Label Text="Bh0pal"
+                               Opacity="0.8"/>
+                        <Label Text="22*C, Cloudy"
+                               Opacity="0.8"/>
+                    </VerticalStackLayout>
+
+                    <Image Grid.Column="2"
+                           Source="dotnet_bot.png"
+                           WidthRequest="20"
+                           HeightRequest="20"
+                           Aspect="AspectFit"/>
+                </Grid>
+            </Border>
+            <HorizontalStackLayout Grid.Column="1">
+                <Border>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20"/>
+                    </Border.StrokeShape>
+                    <ImageButton 
+                                 Source="dotnet_bot.png"
+                                 BackgroundColor="Transparent"
+                                 WidthRequest="24"
+                                 HeightRequest="24"/>
+                </Border>
+
+                <Border>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20"/>
+                    </Border.StrokeShape>
+                    <ImageButton 
+                             Source="dotnet_bot.png"
+                             BackgroundColor="Transparent"
+                             WidthRequest="24"
+                             HeightRequest="24"/>
+                </Border>
+
+                
+            </HorizontalStackLayout>
+
+        </Grid>
+
+    </Grid>
+</ContentPage>

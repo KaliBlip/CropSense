@@ -1,0 +1,386 @@
+## Cell 1 [code]
+# preprocessing
+# imports & paths
+import os, re, shutil
+from sklearn.model_selection import train_test_split
+
+# Path to existing per-crop train_set + test_set root
+RAW_DIR = "/kaggle/input/crop-pest-and-disease-dataset/Dataset for Crop Pest and Disease Detection/CCMT Dataset-Augmented"
+
+# Where I’ll build our unified folders
+OUT_DIR = "/kaggle/working/CCMT_unified"
+TRAIN_DIR = os.path.join(OUT_DIR, "train")
+TEST_DIR  = os.path.join(OUT_DIR, "test")
+
+os.makedirs(TRAIN_DIR, exist_ok=True)
+os.makedirs(TEST_DIR, exist_ok=True)
+
+## Cell 2 [code]
+# define the 18 clean categories
+CATEGORIES = [
+    "anthracnose", "gummosis", "leaf miner", "red rust",
+    "bacterial blight", "brown spot", "green mite", "mosaic",
+    "fall armyworm", "grasshopper", "leaf beetle", "leaf blight",
+    "leaf spot", "streak virus", "leaf curl", "septoria leaf spot",
+    "verticillium wilt", "healthy"
+]
+
+# Pre-create subfolders
+for cat in CATEGORIES:
+    os.makedirs(os.path.join(TRAIN_DIR, cat), exist_ok=True)
+    os.makedirs(os.path.join(TEST_DIR,  cat), exist_ok=True)
+
+## Cell 3 [code]
+# helper to clean folder names
+def clean_name(name):
+    """
+    Strip trailing digits/spaces, collapse multiple spaces, lower-case.
+    e.g. 'leaf miner3466 ' -> 'leaf miner'
+    """
+    # remove digits
+    no_digits = re.sub(r"\d+", "", name)
+    # tidy spaces
+    neat = re.sub(r"\s+", " ", no_digits).strip().lower()
+    return neat
+
+## Cell 4 [code]
+# gather all image paths with their cleaned labels
+all_images = []  # list of (src_path, label)
+for crop in os.listdir(RAW_DIR):
+    crop_dir = os.path.join(RAW_DIR, crop)
+    if not os.path.isdir(crop_dir): 
+        continue
+    # look into both train_set and test_set folders
+    for subset in ("train_set", "test_set"):
+        subset_dir = os.path.join(crop_dir, subset)
+        if not os.path.isdir(subset_dir):
+            continue
+        # iterate each (possibly numeric-suffixed) class folder
+        for fld in os.listdir(subset_dir):
+            fld_path = os.path.join(subset_dir, fld)
+            if not os.path.isdir(fld_path):
+                continue
+            lbl = clean_name(fld)
+            if lbl not in CATEGORIES:
+                # skip any unexpected folders
+                continue
+            # pick up all jpg/png/etc.
+            for fname in os.listdir(fld_path):
+                if fname.lower().endswith((".jpg",".jpeg",".png")):
+                    all_images.append((os.path.join(fld_path, fname), lbl))
+
+print(f"Found {len(all_images)} total images across {len(CATEGORIES)} categories")
+
+## Cell 5 [code]
+# split into train/test and copy files
+# stratify by label to keep class balance
+paths, labels = zip(*all_images)
+train_paths, test_paths, train_lbls, test_lbls = train_test_split(
+    paths, labels,
+    test_size=0.20,
+    random_state=42,
+    stratify=labels
+)
+
+def copy_subset(paths, labels, dest_root):
+    for src, lbl in zip(paths, labels):
+        dest = os.path.join(dest_root, lbl, os.path.basename(src))
+        shutil.copy(src, dest)
+
+# execute copy
+copy_subset(train_paths, train_lbls, TRAIN_DIR)
+copy_subset(test_paths, test_lbls,  TEST_DIR)
+
+print(f"  • Training images: {len(train_paths)}")
+print(f"  •   Testing images: {len(test_paths)}")
+
+## Cell 6 [code]
+# Imports, paths, and hyperparameters
+
+import os
+import matplotlib.pyplot as plt
+import numpy as np
+import tensorflow as tf
+from sklearn.metrics import classification_report, confusion_matrix
+import seaborn as sns
+
+# Paths to unified folders
+TRAIN_DIR = "/kaggle/working/CCMT_unified/train"
+TEST_DIR  = "/kaggle/working/CCMT_unified/test"
+
+# Image + training parameters
+IMG_SIZE        = (224, 224)
+BATCH_SIZE      = 16
+INITIAL_EPOCHS  = 10
+FINETUNE_EPOCHS = 20
+TOTAL_EPOCHS    = INITIAL_EPOCHS + FINETUNE_EPOCHS
+
+# Dynamically infer number of classes (should be 18)
+NUM_CLASSES = len(next(os.walk(TRAIN_DIR))[1])
+print(f"Detected {NUM_CLASSES} classes in {TRAIN_DIR}")
+
+## Cell 7 [code]
+# Build tf.data pipelines with shuffle, prefetch, augmentation, and preprocessing
+
+# a) Load raw datasets
+train_ds = tf.keras.utils.image_dataset_from_directory(
+    TRAIN_DIR,
+    labels='inferred',
+    label_mode='categorical',
+    batch_size=BATCH_SIZE,
+    image_size=IMG_SIZE,
+    shuffle=True,
+    seed=42
+)
+val_ds = tf.keras.utils.image_dataset_from_directory(
+    TEST_DIR,
+    labels='inferred',
+    label_mode='categorical',
+    batch_size=BATCH_SIZE,
+    image_size=IMG_SIZE,
+    shuffle=False
+)
+
+# b) Prefetch only (no in-RAM cache to avoid OOM)
+AUTOTUNE = tf.data.AUTOTUNE
+train_ds = train_ds.shuffle(1000).prefetch(buffer_size=AUTOTUNE)
+val_ds   = val_ds.prefetch(buffer_size=AUTOTUNE)
+
+# c) **Real data-augmentation layers** — list each one explicitly
+data_augmentation = tf.keras.Sequential([
+    tf.keras.layers.RandomFlip("horizontal_and_vertical"),
+    tf.keras.layers.RandomRotation(0.1),
+    tf.keras.layers.RandomZoom(0.1),
+    tf.keras.layers.RandomTranslation(0.1, 0.1),
+])
+
+# d) Preprocessing fn for ResNet50
+preprocess_input = tf.keras.applications.resnet50.preprocess_input
+
+# e) Combined prepare function
+def prepare(ds, training=False):
+    ds = ds.map(
+... (16 more lines)
+
+## Cell 8 [code]
+# Build & compile ResNet50-based model
+
+def build_model():
+    base_model = tf.keras.applications.ResNet50(
+        weights="imagenet",
+        include_top=False,
+        input_shape=IMG_SIZE + (3,)
+    )
+    base_model.trainable = False
+
+    inputs  = tf.keras.Input(shape=IMG_SIZE + (3,))
+    x       = data_augmentation(inputs)
+    x       = preprocess_input(x)
+    x       = base_model(x, training=False)
+    x       = tf.keras.layers.GlobalAveragePooling2D()(x)
+    x       = tf.keras.layers.Dropout(0.3)(x)
+    outputs = tf.keras.layers.Dense(NUM_CLASSES, activation="softmax")(x)
+    return tf.keras.Model(inputs, outputs)
+
+model = build_model()
+model.compile(
+    optimizer=tf.keras.optimizers.Adam(learning_rate=1e-3),
+    loss="categorical_crossentropy",
+    metrics=["accuracy"]
+)
+model.summary()
+
+## Cell 9 [code]
+# Callbacks & learning-rate schedule (save weights only)
+
+checkpoint = tf.keras.callbacks.ModelCheckpoint(
+    filepath="resnet50_head.weights.h5",  
+    monitor="val_accuracy",
+    save_best_only=True,
+    save_weights_only=True,
+    verbose=1
+)
+reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(
+    monitor="val_loss",
+    factor=0.5,
+    patience=2,
+    verbose=1
+)
+early_stop = tf.keras.callbacks.EarlyStopping(
+    monitor="val_loss",
+    patience=5,
+    restore_best_weights=True,
+    verbose=1
+)
+callbacks = [checkpoint, reduce_lr, early_stop]
+
+## Cell 10 [code]
+# Train the new classification head
+
+history_head = model.fit(
+    train_ds,
+    epochs=INITIAL_EPOCHS,
+    validation_data=val_ds,
+    callbacks=callbacks
+)
+
+## Cell 11 [code]
+# Fine-tune deeper layers
+
+# 1) Load best head weights
+model.load_weights("resnet50_head.weights.h5")
+
+# 2) Locate the ResNet50 submodel
+#    (Uncomment the print loop once to confirm the name/index, then pick the right one.)
+# for i,layer in enumerate(model.layers):
+#     print(i, layer.name, type(layer))
+
+# Here we assume the submodel is named "resnet50"
+base_model = model.get_layer("resnet50")  
+base_model.trainable = True
+
+# 3) Find the start of conv5_block1 (first layer of last block)
+start_fine_tune = next(
+    (i for i, l in enumerate(base_model.layers) if l.name == "conv5_block1_out"),
+    len(base_model.layers)//2
+)
+
+# 4) Freeze all layers up to that point, unfreeze the rest
+for layer in base_model.layers[:start_fine_tune]:
+    layer.trainable = False
+for layer in base_model.layers[start_fine_tune:]:
+    layer.trainable = True
+
+# 5) Recompile with a lower LR for fine-tuning
+model.compile(
+    optimizer=tf.keras.optimizers.Adam(learning_rate=1e-4),
+    loss="categorical_crossentropy",
+    metrics=["accuracy"]
+)
+
+# 6) Continue training
+history_fine = model.fit(
+    train_ds,
+    epochs=TOTAL_EPOCHS,
+    initial_epoch=history_head.epoch[-1],
+    validation_data=val_ds,
+    callbacks=callbacks
+... (1 more lines)
+
+## Cell 12 [code]
+# Plot combined training history
+
+def plot_history(h1, h2):
+    acc      = h1.history["accuracy"] + h2.history["accuracy"]
+    val_acc  = h1.history["val_accuracy"] + h2.history["val_accuracy"]
+    loss     = h1.history["loss"] + h2.history["loss"]
+    val_loss = h1.history["val_loss"] + h2.history["val_loss"]
+    epochs   = range(len(acc))
+
+    plt.figure(figsize=(14,5))
+    # Accuracy
+    plt.subplot(1,2,1)
+    plt.plot(epochs, acc,     label="Train Acc")
+    plt.plot(epochs, val_acc, label="Val Acc")
+    plt.axvline(INITIAL_EPOCHS-1, linestyle="--", color="gray", label="Fine-tune Start")
+    plt.legend()
+    plt.title("Accuracy")
+
+    # Loss
+    plt.subplot(1,2,2)
+    plt.plot(epochs, loss,     label="Train Loss")
+    plt.plot(epochs, val_loss, label="Val Loss")
+    plt.axvline(INITIAL_EPOCHS-1, linestyle="--", color="gray")
+    plt.legend()
+    plt.title("Loss")
+
+    plt.show()
+
+plot_history(history_head, history_fine)
+
+## Cell 13 [code]
+# Save final model weights
+
+model.save_weights("resnet50_final.weights.h5")
+print("Final weights saved to resnet50_final.weights.h5")
+
+## Cell 14 [code]
+# Sample‐based visualization from any image format
+
+import pathlib
+import random
+from PIL import Image
+import numpy as np
+import matplotlib.pyplot as plt
+
+# a) Gather all files under TEST_DIR (any extension)
+all_files = list(pathlib.Path(TEST_DIR).rglob("*"))
+image_files = [p for p in all_files if p.is_file()]
+
+# b) Sample 9 (or fewer) images
+sample_paths = random.sample(image_files, min(9, len(image_files)))
+
+# c) Load & prepare images and true labels
+imgs, true_labels = [], []
+for p in sample_paths:
+    img = Image.open(p).convert("RGB").resize(IMG_SIZE)
+    arr = np.array(img)
+    imgs.append(arr)
+    true_labels.append(p.parent.name)  # folder name is the true label
+
+imgs = np.stack(imgs)  # shape (9, H, W, 3)
+imgs_pre = preprocess_input(imgs.astype(np.float32))
+
+# d) Predict
+pred_probs   = model.predict(imgs_pre)
+pred_indices = np.argmax(pred_probs, axis=1)
+
+# e) Compute class_names automatically (alphabetical, as used by Keras)
+class_names = sorted([d.name for d in pathlib.Path(TRAIN_DIR).iterdir() if d.is_dir()])
+
+# f) Plot 3×3 grid
+plt.figure(figsize=(12,12))
+for i, orig in enumerate(imgs):
+    plt.subplot(3, 3, i+1)
+    plt.imshow(orig.astype("uint8"))
+    plt.title(
+        f"True: {true_labels[i]}\n"
+... (5 more lines)
+
+## Cell 15 [code]
+# Confusion Matrix for Validation Set
+
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.metrics import confusion_matrix
+import pathlib
+
+# a) Automatically get class names (alphabetical order as used by the model)
+class_names = sorted([d.name for d in pathlib.Path(TRAIN_DIR).iterdir() if d.is_dir()])
+
+# b) Predict on the entire validation dataset
+y_pred_probs = model.predict(val_ds)
+y_pred = np.argmax(y_pred_probs, axis=1)
+
+# c) Extract true labels from val_ds
+y_true = np.concatenate([y for x, y in val_ds], axis=0)
+y_true = np.argmax(y_true, axis=1)
+
+# d) Compute and plot the confusion matrix
+cm = confusion_matrix(y_true, y_pred)
+plt.figure(figsize=(12, 10))
+sns.heatmap(
+    cm,
+    annot=True,
+    fmt='d',
+    xticklabels=class_names,
+    yticklabels=class_names,
+    cmap='Blues'
+)
+plt.xlabel('Predicted')
+plt.ylabel('True')
+plt.title('Confusion Matrix')
+plt.xticks(rotation=45, ha='right')
+plt.tight_layout()
+plt.show()

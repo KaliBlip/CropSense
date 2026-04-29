@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CropSense.Views.CropViewPage"
+             Shell.NavBarIsVisible="False"
+             Title="Crop View">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="12">
+            <Label Text="Crop View" Style="{StaticResource Headline}" />
+            <Label Text="Choose your crop or field camera." Style="{StaticResource SubHeadline}" />
+            <Image Source="screens1.png" Aspect="AspectFit" />
+            <Button Text="Open Crop Camera" Clicked="OnOpenCropCameraClicked" />
+            <Button Text="Open Crop Metrics" Clicked="OnOpenCropMetricsClicked" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

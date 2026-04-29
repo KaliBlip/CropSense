@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace CropSense;
+﻿namespace CropSense;
 
 public partial class App : Application
 {

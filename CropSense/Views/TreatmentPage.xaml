@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CropSense.Views.TreatmentPage"
+             Shell.NavBarIsVisible="False"
+             Title="Treatment">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="14">
+            <Label Text="Treatment" Style="{StaticResource Headline}" />
+            <Border StrokeShape="RoundRectangle 14" Padding="14" BackgroundColor="#1F2A1F">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Biological" FontAttributes="Bold" />
+                    <Label Text="Spray with fermented tea" FontAttributes="Bold" />
+                    <Label Text="Use compost tea or horsetail tea to contain spread in early stages." />
+                    <Label Text="Bordeaux mixture" FontAttributes="Bold" />
+                    <Label Text="Apply carefully based on recommended concentration and interval." />
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

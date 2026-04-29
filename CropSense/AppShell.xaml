@@ -3,12 +3,26 @@
     x:Class="CropSense.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:CropSense"
+    xmlns:views="clr-namespace:CropSense.Views"
     Title="CropSense">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <TabBar>
+        <ShellContent
+            Title="Home"
+            Route="home"
+            ContentTemplate="{DataTemplate views:HomePage}" />
+        <ShellContent
+            Title="Crops"
+            Route="crop-view"
+            ContentTemplate="{DataTemplate views:CropViewPage}" />
+        <ShellContent
+            Title="Scan"
+            Route="capture"
+            ContentTemplate="{DataTemplate views:CapturePage}" />
+        <ShellContent
+            Title="Profile"
+            Route="settings"
+            ContentTemplate="{DataTemplate views:SettingsPage}" />
+    </TabBar>
 
 </Shell>

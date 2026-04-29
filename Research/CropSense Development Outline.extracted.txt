@@ -1,0 +1,371 @@
+CropSense
+AI-Powered Crop Pest &amp; Disease Detection
+Project Development Outline &amp; Team Task Assignment
+
+Project
+CropSense
+Challenge
+Ghana AI Innovation Challenge 2026
+Domain
+Agriculture
+Submission Deadline
+1st July 2026
+
+Team Member Key
+
+Data Scientist (Lead)
+Software Developer
+Electronics Engineer
+CAD / Prototyping
+All Team Members
+
+Development Timeline Overview
+
+Stage
+Title
+Duration
+Primary Owner(s)
+Stage 1
+Project Setup &amp; Data Preparation
+Week 1–2
+Data Scientist, Electronics Eng., CAD
+Stage 2
+AI Model Development &amp; Training
+Week 3–5
+Data Scientist, Software Developer
+Stage 3
+Mobile App Development
+Week 5–8
+Software Developer, Data Scientist
+Stage 4
+Embedded Device Development
+Week 5–9
+Electronics Eng., CAD, Software Dev.
+Stage 5
+Integration, Testing &amp; Refinement
+Week 9–10
+All Team Members
+Stage 6
+Submission &amp; Summit Preparation
+Week 10–12
+All Team Members
+
+Stage 1  |  Project Setup &amp; Data Preparation
+Week 1 – 2
+
+Objective: Establish the project foundation: set up the shared GitHub repository, prepare and pre-process the crop pest dataset, and align all team members on tools and workflow.
+
+Task
+Owner
+Details
+Timeline
+GitHub repository setup &amp; project structure
+Software Developer
+Create repo, define folder structure (data/, models/, app/, device/, cad/), configure README and branching strategy
+Day 1–2
+Dataset download, inspection &amp; EDA
+Data Scientist
+Download dataset from Mendeley, inspect class distribution across 22 classes, identify imbalances, document findings
+Day 1–4
+Data pre-processing pipeline
+Data Scientist
+Resize all images to 224x224, normalise pixel values, split into train/validation/test (70/15/15), write reusable preprocessing scripts
+Day 3–6
+Data augmentation scripts
+Data Scientist
+Implement augmentation (rotation, flip, brightness, contrast, zoom) using TensorFlow ImageDataGenerator
+Day 5–7
+Hardware component procurement list
+Electronics Engineer
+Research and document Raspberry Pi Zero 2W, OV5647 camera module, LCD display, Li-Po battery, and supporting components; prepare procurement order
+Day 1–5
+CAD concept sketches for device enclosure
+CAD / Prototyping
+Sketch initial form factor for handheld scouting device; define rough dimensions to accommodate Pi + camera + display + battery
+Day 3–7
+
+Stage Deliverables:
+
+GitHub repository live with all team members onboarded
+Cleaned and split dataset ready for model training
+Data augmentation scripts committed and tested
+Hardware procurement list finalised
+Initial device concept sketches completed
+
+Stage 2  |  AI Model Development &amp; Training
+Week 3 – 5
+
+Objective: Train, evaluate, and benchmark the CNN classification model. Select the best architecture for dual deployment (mobile + embedded). Export to TensorFlow Lite.
+
+Task
+Owner
+Details
+Timeline
+Baseline model training (MobileNetV2)
+Data Scientist
+Implement transfer learning from ImageNet pretrained MobileNetV2; fine-tune on crop dataset; log accuracy, loss, confusion matrix
+Day 1–5
+Benchmark model training (EfficientNet-Lite)
+Data Scientist
+Train EfficientNet-Lite0 and Lite2 variants; compare against MobileNetV2 on accuracy, inference speed, and model size
+Day 5–10
+Model evaluation &amp; selection
+Data Scientist
+Evaluate all models on test set; generate per-class precision/recall/F1; select final model based on accuracy vs. latency trade-off
+Day 10–12
+TensorFlow Lite export &amp; quantisation
+Data Scientist + Software Developer
+Convert selected model to .tflite format; apply INT8 post-training quantisation; verify accuracy loss is within 1%; test inference on test images
+Day 12–15
+Treatment recommendation database
+Software Developer
+Create JSON lookup table mapping each of the 22 disease/pest classes to a concise treatment recommendation in English and Twi
+Day 8–12
+
+Stage Deliverables:
+
+Trained model achieving &gt;= 92% test accuracy on 22-class dataset
+Benchmark comparison table committed to repository
+Final .tflite model file (quantised) committed to repository
+Treatment recommendation JSON database (English + Twi)
+
+Stage 3  |  Mobile App Development (Project 1)
+Week 5 – 8
+
+Objective: Build the CropSense mobile application in .NET MAUI. Integrate the TFLite model for on-device inference. Implement camera capture, result display, and offline treatment recommendations.
+
+Task
+Owner
+Details
+Timeline
+.NET MAUI app scaffold &amp; UI design
+Software Developer
+Set up .NET MAUI project in Visual Studio; design UI screens (home, camera capture, result, settings) using XAML; implement English/Twi language toggle via resource files
+Day 1–6
+TFLite model integration into app
+Software Developer + Data Scientist
+Bundle .tflite model in .NET MAUI raw assets; integrate TensorFlow.Lite NuGet package; write image pre-processing pipeline matching training parameters using SkiaSharp
+Day 5–10
+Camera capture &amp; image input flow
+Software Developer
+Implement live camera capture and gallery upload; add image cropping/resizing to 224x224 before inference
+Day 6–10
+Result screen &amp; recommendation display
+Software Developer
+Display detected disease name, confidence score, crop type, and treatment recommendation; show healthy/warning/critical colour badge
+Day 10–14
+Offline functionality &amp; app testing
+Software Developer
+Verify all features work without internet; test on Android and iOS devices of varying specs; fix crashes and UI issues; measure inference time
+Day 14–18
+App UX review &amp; Twi localisation check
+Data Scientist
+Review UI flow from a farmer's perspective; verify Twi translations are accurate; suggest UX improvements
+Day 15–18
+
+Stage Deliverables:
+
+Working .NET MAUI app running on Android and iOS
+On-device inference under 2 seconds on mid-range phones
+Disease result screen with treatment recommendation in English and Twi
+Fully offline — no internet dependency confirmed
+
+Stage 4  |  Embedded Device Development (Project 2)
+Week 5 – 9
+
+Objective: Design and build the CropSense handheld embedded scouting device. 3D-print the enclosure, wire the hardware, and deploy the TFLite model on Raspberry Pi with a Python inference pipeline.
+
+Task
+Owner
+Details
+Timeline
+Device enclosure CAD design
+CAD / Prototyping
+Design full 3D model of handheld enclosure in Fusion 360; include camera aperture, display window, button cutouts, battery slot, and ventilation; export .STL files
+Day 1–8
+3D printing &amp; enclosure assembly
+CAD / Prototyping
+Print enclosure in PLA/PETG; test fit of all components; iterate and reprint if needed; sand and finish for presentation
+Day 8–14
+Hardware wiring &amp; circuit assembly
+Electronics Engineer
+Wire Raspberry Pi Zero 2W to OV5647 camera, 2-inch LCD display, status LEDs, push button, and Li-Po battery with protection circuit
+Day 1–8
+Power management &amp; battery circuit
+Electronics Engineer
+Implement TP4056-based Li-Po charge circuit; add power switch; test 6-hour runtime target; add low-battery LED indicator
+Day 6–12
+Raspberry Pi OS setup &amp; TFLite runtime
+Software Developer
+Flash Raspberry Pi OS Lite; install TFLite Runtime, OpenCV, and Pillow; deploy model and test inference on device
+Day 3–8
+Python inference firmware
+Software Developer + Electronics Engineer
+Write main.py: button-triggered capture, image pre-processing, TFLite inference, result display on LCD, LED colour output (green=healthy, red=diseased), audio beep
+Day 8–15
+Field simulation testing
+All team members
+Simulate outdoor use: test under natural light, different backgrounds, partial leaf coverage; measure inference time on device; fix edge cases
+Day 15–18
+
+Stage Deliverables:
+
+Printed and assembled device enclosure
+Fully wired and powered hardware prototype
+Python firmware deployed and running on Raspberry Pi
+On-device inference confirmed under 3 seconds
+CAD files (.STL and Fusion 360) committed to repository
+
+Stage 5  |  Integration, Testing &amp; Refinement
+Week 9 – 10
+
+Objective: Bring both projects together for final integration testing. Fix bugs, improve accuracy on edge cases, and ensure both deliverables are demo-ready for the Summit.
+
+Task
+Owner
+Details
+Timeline
+End-to-end mobile app testing
+Software Developer + Data Scientist
+Run full test suite: 50+ real leaf photos across all 22 classes; log accuracy, false positives, and UI issues; patch model or app as needed
+Day 1–5
+End-to-end device testing
+Electronics Engineer + Software Developer
+Run device through 100+ capture-infer cycles; test battery life; stress test for thermal performance; fix hardware faults
+Day 1–5
+Model fine-tuning on failure cases
+Data Scientist
+Collect and retrain on images that were mis-classified during integration testing; re-export updated .tflite; redeploy to both platforms
+Day 3–7
+GitHub repository clean-up &amp; documentation
+Software Developer
+Write README with setup instructions, model performance summary, and demo guide; ensure all scripts are reproducible; add licence file
+Day 5–8
+Final device assembly &amp; finish
+CAD / Prototyping + Electronics Engineer
+Final enclosure fit check; label device; ensure clean cable routing inside casing; prepare carry case for summit transport
+Day 6–10
+
+Stage Deliverables:
+
+Final tested .NET MAUI app and device firmware committed
+Updated .tflite model with improved accuracy on edge cases
+Complete GitHub repository with documentation
+Summit-ready physical device prototype
+
+Stage 6  |  Competition Submission &amp; Summit Preparation
+Week 10 – 12
+
+Objective: Prepare and submit the Technical Abstract by 1st July 2026. Design the poster for Summit Day. Prepare and rehearse the live 10-15 minute pitch.
+
+Task
+Owner
+Details
+Timeline
+Technical Abstract writing
+Data Scientist + Software Developer
+Write the 1-2 page technical abstract covering: problem statement, dataset, methodology, results, impact, and team. Submit via challenge portal by 1st July 2026
+Day 1–5
+Technical Abstract review
+All team members
+All team members review and approve abstract before submission; check accuracy of results, methodology descriptions, and team details
+Day 5–6
+A1 Poster design
+CAD / Prototyping + Software Developer
+Design A1 poster using Canva or Figma; include: problem, dataset, system architecture diagram, model results table, device photo, impact section
+Day 7–14
+Live pitch deck preparation
+Data Scientist + Software Developer
+Build 10-15 minute presentation covering: problem, solution overview, demo, technical deep-dive, impact, and future work
+Day 10–18
+Demo script &amp; rehearsal
+All team members
+Script the live demo of both the mobile app and embedded device; rehearse full pitch 3+ times; prepare for judge Q&amp;A
+Day 15–21
+Summit Day — poster &amp; live pitch
+All team members
+Attend Ghana AI Summit on 30th July 2026 in Accra; present poster, deliver live pitch, demonstrate both prototypes to judging panel
+30 Jul 2026
+
+Stage Deliverables:
+
+Technical Abstract submitted by 1st July 2026
+A1 poster printed and ready for Summit Day
+Pitch deck finalised and rehearsed
+Both prototypes transported and demo-ready for 30th July
+
+Overall Responsibility Matrix
+
+This matrix summarises each team member's primary involvement across all six development stages.
+
+Team Member
+Stage 1
+Stage 2
+Stage 3
+Stage 4
+Stage 5
+Stage 6
+Data Scientist (Lead)
+Primary
+Primary
+Support
+—
+Support
+Primary
+Software Developer
+Primary
+Support
+Primary
+Primary
+Primary
+Support
+Electronics Engineer
+Primary
+—
+—
+Primary
+Primary
+—
+CAD / Prototyping
+Primary
+—
+—
+Primary
+Support
+Primary
+Primary = leads and owns the task     Support = contributes to the task     — = not involved in this stage
+
+Key Dates &amp; Milestones
+
+Date
+Milestone
+Owner
+Now – Week 2
+Dataset prepared, GitHub set up, hardware procured
+All
+Week 5
+Trained model (.tflite) finalised and committed
+Data Scientist
+Week 8
+Mobile app (.NET MAUI) completed and tested
+Software Dev.
+Week 9
+Embedded device fully assembled and firmware deployed
+Electronics + CAD
+Week 10
+Integration testing complete, all bugs resolved
+All
+1 Jul 2026
+Technical Abstract submitted (challenge deadline)
+Data Scientist
+15 Jul 2026
+Shortlist notifications expected
+—
+Week 11–12
+Poster printed, pitch rehearsed, device packed
+All
+30 Jul 2026
+Ghana AI Summit — poster + live pitch + demo
+All
+
+CropSense  |  Ghana AI Innovation Challenge 2026  |  Kumasi Technical University

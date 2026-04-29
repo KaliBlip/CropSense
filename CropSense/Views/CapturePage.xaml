@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CropSense.Views.CapturePage"
+             Shell.NavBarIsVisible="False"
+             Title="Capture">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="12">
+            <Label Text="Scan Crop Leaf" Style="{StaticResource Headline}" />
+            <Image Source="screens2.png" Aspect="AspectFit" HorizontalOptions="Fill" />
+            <Entry Placeholder="Image path (placeholder)" Text="{Binding ImagePath}" />
+            <Button Text="Run Diagnosis" Command="{Binding RunInferenceCommand}" />
+            <Button Text="Open Crop Camera View" Clicked="OnCropCameraClicked" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

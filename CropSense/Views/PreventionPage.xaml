@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CropSense.Views.PreventionPage"
+             Shell.NavBarIsVisible="False"
+             Title="Prevention">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="14">
+            <Label Text="Prevention" Style="{StaticResource Headline}" />
+            <Label Text="1. Take great care in how you water" FontAttributes="Bold" />
+            <Label Text="Water at the soil level early in the day. Avoid splashing and evening overhead watering." />
+            <Label Text="2. Increase air circulation and spacing" FontAttributes="Bold" />
+            <Label Text="Space plants properly, prune lower leaves, and support stems to reduce leaf wetness." />
+            <Label Text="3. Keep target plants away from each other" FontAttributes="Bold" />
+            <Label Text="Avoid crowding different hosts together to minimize cross-spread of leaf spot fungi." />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

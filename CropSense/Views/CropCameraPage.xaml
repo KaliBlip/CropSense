@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CropSense.Views.CropCameraPage"
+             Shell.NavBarIsVisible="False"
+             Title="Crop Camera">
+    <Grid>
+        <Image Source="screens1.png" Aspect="AspectFill" />
+        <VerticalStackLayout Padding="20" VerticalOptions="End" Spacing="10">
+            <Button Text="Capture" />
+            <Button Text="View Metrics" Clicked="OnViewMetricsClicked" />
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

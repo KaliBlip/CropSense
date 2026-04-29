@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CropSense.Views.CropMetricsPage"
+             Shell.NavBarIsVisible="False"
+             Title="Crop Metrics">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="12">
+            <Label Text="Tomato Crop" Style="{StaticResource Headline}" />
+            <Label Text="Farm 13-A • Healthy" Style="{StaticResource SubHeadline}" />
+            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+                <Border Grid.Row="0" Grid.Column="0" StrokeShape="RoundRectangle 14" Padding="12">
+                    <VerticalStackLayout>
+                        <Label Text="Temp." />
+                        <Label Text="25 C" FontSize="24" />
+                    </VerticalStackLayout>
+                </Border>
+                <Border Grid.Row="0" Grid.Column="1" StrokeShape="RoundRectangle 14" Padding="12">
+                    <VerticalStackLayout>
+                        <Label Text="Humidity" />
+                        <Label Text="40%" FontSize="24" />
+                    </VerticalStackLayout>
+                </Border>
+                <Border Grid.Row="1" Grid.Column="0" StrokeShape="RoundRectangle 14" Padding="12">
+                    <VerticalStackLayout>
+                        <Label Text="Light" />
+                        <Label Text="8000 lx" FontSize="24" />
+                    </VerticalStackLayout>
+                </Border>
+                <Border Grid.Row="1" Grid.Column="1" StrokeShape="RoundRectangle 14" Padding="12">
+                    <VerticalStackLayout>
+                        <Label Text="Soil Moisture" />
+                        <Label Text="35%" FontSize="24" />
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

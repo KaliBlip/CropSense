@@ -1,16 +1,228 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="CropSense.Views.CapturePage"
              Shell.NavBarIsVisible="False"
-             Title="Capture">
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="12">
-            <Label Text="Scan Crop Leaf" Style="{StaticResource Headline}" />
-            <Image Source="screens2.png" Aspect="AspectFit" HorizontalOptions="Fill" />
-            <Entry Placeholder="Image path (placeholder)" Text="{Binding ImagePath}" />
-            <Button Text="Run Diagnosis" Command="{Binding RunInferenceCommand}" />
-            <Button Text="Open Crop Camera View" Clicked="OnCropCameraClicked" />
-        </VerticalStackLayout>
-    </ScrollView>
+             Title="Capture"
+             BackgroundColor="Black"
+             SafeAreaEdges="None">
+
+    <Grid SafeAreaEdges="None">
+
+        <toolkit:CameraView x:Name="Camera"
+                            HorizontalOptions="Fill"
+                            VerticalOptions="Fill"
+                            CameraFlashMode="Off" />
+
+        <Grid RowDefinitions="Auto,*,Auto"
+              SafeAreaEdges="None"
+              InputTransparent="True"
+              HorizontalOptions="Fill"
+              VerticalOptions="Fill">
+
+            <!-- Back -->
+            <HorizontalStackLayout Grid.Row="0"
+                                   Padding="20,52,20,12"
+                                   InputTransparent="True">
+                <Border StrokeThickness="0"
+                        BackgroundColor="#804A5C38"
+                        HeightRequest="44"
+                        WidthRequest="44"
+                        InputTransparent="False">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="22" />
+                    </Border.StrokeShape>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackClicked" />
+                    </Border.GestureRecognizers>
+                    <Label Text="‹"
+                           FontSize="28"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Margin="0,-4,0,0" />
+                </Border>
+            </HorizontalStackLayout>
+
+            <!-- Viewfinder + scan line -->
+            <Grid Grid.Row="1"
+                  InputTransparent="True"
+                  VerticalOptions="Center"
+                  HorizontalOptions="Center"
+                  WidthRequest="300"
+                  HeightRequest="300">
+                <Grid HorizontalOptions="Fill"
+                      VerticalOptions="Fill"
+                      Padding="8">
+                    <Grid HorizontalOptions="Start"
+                          VerticalOptions="Start"
+                          WidthRequest="48"
+                          HeightRequest="48">
+                        <Border StrokeThickness="0"
+                                BackgroundColor="White"
+                                WidthRequest="4"
+                                HeightRequest="36"
+                                HorizontalOptions="Start"
+                                VerticalOptions="Start" />
+                        <Border StrokeThickness="0"
+                                BackgroundColor="White"
+                                WidthRequest="36"
+                                HeightRequest="4"
+                                HorizontalOptions="Start"
+                                VerticalOptions="Start" />
+                    </Grid>
+                    <Grid HorizontalOptions="End"
+                          VerticalOptions="Start"
+                          WidthRequest="48"
+                          HeightRequest="48">
+                        <Border StrokeThickness="0"
+                                BackgroundColor="White"
+                                WidthRequest="4"
+                                HeightRequest="36"
+                                HorizontalOptions="End"
+                                VerticalOptions="Start" />
+                        <Border StrokeThickness="0"
+                                BackgroundColor="White"
+                                WidthRequest="36"
+                                HeightRequest="4"
+                                HorizontalOptions="End"
+                                VerticalOptions="Start" />
+                    </Grid>
+                    <Grid HorizontalOptions="Start"
+                          VerticalOptions="End"
+                          WidthRequest="48"
+                          HeightRequest="48">
+                        <Border StrokeThickness="0"
+                                BackgroundColor="White"
+                                WidthRequest="4"
+                                HeightRequest="36"
+                                HorizontalOptions="Start"
+                                VerticalOptions="End" />
+                        <Border StrokeThickness="0"
+                                BackgroundColor="White"
+                                WidthRequest="36"
+                                HeightRequest="4"
+                                HorizontalOptions="Start"
+                                VerticalOptions="End" />
+                    </Grid>
+                    <Grid HorizontalOptions="End"
+                          VerticalOptions="End"
+                          WidthRequest="48"
+                          HeightRequest="48">
+                        <Border StrokeThickness="0"
+                                BackgroundColor="White"
+                                WidthRequest="4"
+                                HeightRequest="36"
+                                HorizontalOptions="End"
+                                VerticalOptions="End" />
+                        <Border StrokeThickness="0"
+                                BackgroundColor="White"
+                                WidthRequest="36"
+                                HeightRequest="4"
+                                HorizontalOptions="End"
+                                VerticalOptions="End" />
+                    </Grid>
+                </Grid>
+
+                <Border x:Name="ScanBar"
+                        StrokeThickness="0"
+                        HeightRequest="36"
+                        WidthRequest="220"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        Opacity="0.45"
+                        InputTransparent="True">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                            <GradientStop Color="#00000000" Offset="0" />
+                            <GradientStop Color="#55FFFFFF" Offset="0.5" />
+                            <GradientStop Color="#00000000" Offset="1" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="6" />
+                    </Border.StrokeShape>
+                </Border>
+            </Grid>
+
+            <!-- Bottom controls -->
+            <Grid Grid.Row="2"
+                  ColumnDefinitions="*,Auto,*"
+                  Padding="28,0,28,40"
+                  VerticalOptions="End"
+                  InputTransparent="True">
+                <Border Grid.Column="0"
+                        StrokeThickness="2"
+                        Stroke="#44FFFFFF"
+                        HeightRequest="56"
+                        WidthRequest="56"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center"
+                        InputTransparent="False">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="28" />
+                    </Border.StrokeShape>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnGalleryClicked" />
+                    </Border.GestureRecognizers>
+                    <Image x:Name="GalleryThumbnail"
+                           Source="lettuce.png"
+                           Aspect="AspectFill"
+                           Margin="3" />
+                </Border>
+
+                <Grid Grid.Column="1"
+                      HorizontalOptions="Center"
+                      VerticalOptions="Center"
+                      HeightRequest="84"
+                      WidthRequest="84"
+                      InputTransparent="False">
+                    <Border StrokeThickness="2"
+                            Stroke="#66FFFFFF"
+                            HeightRequest="84"
+                            WidthRequest="84"
+                            BackgroundColor="Transparent">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="42" />
+                        </Border.StrokeShape>
+                    </Border>
+                    <Border StrokeThickness="0"
+                            HeightRequest="64"
+                            WidthRequest="64"
+                            BackgroundColor="White"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="32" />
+                        </Border.StrokeShape>
+                    </Border>
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnShutterClicked" />
+                    </Grid.GestureRecognizers>
+                </Grid>
+
+                <Border Grid.Column="2"
+                        StrokeThickness="0"
+                        BackgroundColor="#66333333"
+                        HeightRequest="56"
+                        WidthRequest="56"
+                        HorizontalOptions="End"
+                        VerticalOptions="Center"
+                        InputTransparent="False">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="28" />
+                    </Border.StrokeShape>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnSwitchCameraClicked" />
+                    </Border.GestureRecognizers>
+                    <Label Text="⟳"
+                           FontSize="26"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
 </ContentPage>

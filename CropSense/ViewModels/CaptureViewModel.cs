@@ -27,11 +27,22 @@ public sealed partial class CaptureViewModel : BaseViewModel
 	[RelayCommand]
 	private async Task RunInferenceAsync()
 	{
+		await AnalyzeImageAtAsync(ImagePath);
+	}
+
+	/// <summary>Runs diagnosis on an absolute file path (camera capture or gallery).</summary>
+	public async Task AnalyzeImageAtAsync(string fullPath)
+	{
+		if (string.IsNullOrWhiteSpace(fullPath))
+			return;
+
 		IsBusy = true;
 		try
 		{
-			LastResult = await _runDiagnosisUseCase.ExecuteAsync(ImagePath);
+			ImagePath = fullPath;
+			LastResult = await _runDiagnosisUseCase.ExecuteAsync(fullPath);
 			_diagnosisSession.LastResult = LastResult;
+			_diagnosisSession.LastAnalyzedImagePath = fullPath;
 			await Shell.Current.GoToAsync("//result");
 		}
 		finally

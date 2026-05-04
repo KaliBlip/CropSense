@@ -1,19 +1,24 @@
+using CropSense.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
+
 namespace CropSense.Views;
 
 public partial class CropViewPage : ContentPage
 {
 	public CropViewPage()
+		: this(ResolveRequired<CropViewViewModel>())
+	{
+	}
+
+	public CropViewPage(CropViewViewModel viewModel)
 	{
 		InitializeComponent();
+		BindingContext = viewModel;
 	}
 
-	private async void OnOpenCropCameraClicked(object? sender, EventArgs e)
+	private static T ResolveRequired<T>() where T : class
 	{
-		await Shell.Current.GoToAsync("crop-camera");
-	}
-
-	private async void OnOpenCropMetricsClicked(object? sender, EventArgs e)
-	{
-		await Shell.Current.GoToAsync("crop-metrics");
+		return Application.Current?.Handler?.MauiContext?.Services.GetService<T>()
+			?? throw new InvalidOperationException($"Service {typeof(T).Name} is not registered.");
 	}
 }

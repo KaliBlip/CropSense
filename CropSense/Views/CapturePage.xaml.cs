@@ -36,7 +36,7 @@ public partial class CapturePage : ContentPage
 		var cameraStatus = await Permissions.RequestAsync<Permissions.Camera>();
 		if (cameraStatus != PermissionStatus.Granted)
 		{
-			await DisplayAlert("Camera", "Camera permission is required to scan crop leaves.", "OK");
+			await DisplayAlertAsync("Camera", "Camera permission is required to scan crop leaves.", "OK");
 			return;
 		}
 
@@ -103,14 +103,14 @@ public partial class CapturePage : ContentPage
 		catch (Exception ex)
 		{
 			await MainThread.InvokeOnMainThreadAsync(async () =>
-				await DisplayAlert("Capture", ex.Message, "OK"));
+				await DisplayAlertAsync("Capture", ex.Message, "OK"));
 		}
 	}
 
 	private async void OnMediaCaptureFailed(object? sender, MediaCaptureFailedEventArgs e)
 	{
 		await MainThread.InvokeOnMainThreadAsync(async () =>
-			await DisplayAlert("Capture", e.FailureReason ?? "Capture failed.", "OK"));
+			await DisplayAlertAsync("Capture", e.FailureReason ?? "Capture failed.", "OK"));
 	}
 
 	private async void OnShutterClicked(object? sender, EventArgs e)
@@ -127,7 +127,7 @@ public partial class CapturePage : ContentPage
 		}
 		catch (Exception ex)
 		{
-			await DisplayAlert("Capture", ex.Message, "OK");
+			await DisplayAlertAsync("Capture", ex.Message, "OK");
 		}
 	}
 
@@ -135,13 +135,15 @@ public partial class CapturePage : ContentPage
 	{
 		try
 		{
-			var photo = await MediaPicker.Default.PickPhotoAsync(new MediaPickerOptions
+			var photos = await MediaPicker.Default.PickPhotosAsync(new MediaPickerOptions
 			{
 				Title = "Choose a leaf photo"
 			});
 
-			if (photo is null)
+			if (photos is null || photos.Count == 0)
 				return;
+
+			var photo = photos[0];
 
 			var path = await ResolvePickedPhotoPathAsync(photo);
 			if (string.IsNullOrEmpty(path))
@@ -154,7 +156,7 @@ public partial class CapturePage : ContentPage
 		}
 		catch (Exception ex)
 		{
-			await DisplayAlert("Gallery", ex.Message, "OK");
+			await DisplayAlertAsync("Gallery", ex.Message, "OK");
 		}
 	}
 
@@ -186,7 +188,7 @@ public partial class CapturePage : ContentPage
 		}
 		catch (Exception ex)
 		{
-			await DisplayAlert("Camera", ex.Message, "OK");
+			await DisplayAlertAsync("Camera", ex.Message, "OK");
 		}
 	}
 

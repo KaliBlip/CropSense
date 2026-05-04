@@ -12,19 +12,27 @@
 
     <TabBar>
         <ShellContent
+            x:Name="HomeTab"
             Title="Home"
+            Icon="monitorplant.png"
             Route="home"
             ContentTemplate="{DataTemplate views:HomePage}" />
         <ShellContent
+            x:Name="CropsTab"
             Title="Crops"
+            Icon="bell.png"
             Route="crop-view"
             ContentTemplate="{DataTemplate views:CropViewPage}" />
         <ShellContent
+            x:Name="ScanTab"
             Title="Scan"
+            Icon="camera.png"
             Route="capture"
             ContentTemplate="{DataTemplate views:CapturePage}" />
         <ShellContent
+            x:Name="ProfileTab"
             Title="Profile"
+            Icon="user.png"
             Route="settings"
             ContentTemplate="{DataTemplate views:ResultPage}" />
     </TabBar>

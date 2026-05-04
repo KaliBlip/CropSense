@@ -15,5 +15,24 @@ public partial class AppShell : Shell
 		Routing.RegisterRoute("treatment", typeof(Views.TreatmentPage));
 		Routing.RegisterRoute("prevention", typeof(Views.PreventionPage));
 		Routing.RegisterRoute("settings", typeof(Views.SettingsPage));
+
+		Navigated += (_, _) => UpdateTabBarIcons();
+		Loaded += (_, _) => UpdateTabBarIcons();
+	}
+
+	void UpdateTabBarIcons()
+	{
+		var current = CurrentItem?.CurrentItem?.CurrentItem as ShellContent;
+		var selectedRoute = current?.Route;
+
+		void Apply(ShellContent tab, string outlineFile, string filledFile, string route)
+		{
+			tab.Icon = ImageSource.FromFile(selectedRoute == route ? filledFile : outlineFile);
+		}
+
+		Apply(HomeTab, "monitorplant.png", "monitorplant.png", "home");
+		Apply(CropsTab, "bell.png", "bell.png", "crop-view");
+		Apply(ScanTab, "camera.png", "camera.png", "capture");
+		Apply(ProfileTab, "user.png", "user.png", "settings");
 	}
 }

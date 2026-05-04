@@ -36,5 +36,9 @@
 	</array>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/appicon.appiconset</string>
+	<key>NSCameraUsageDescription</key>
+	<string>CropSense needs camera access to photograph crop leaves for disease analysis.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>CropSense can analyze a leaf photo you choose from your library.</string>
 </dict>
 </plist>

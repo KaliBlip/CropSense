@@ -1,5 +1,6 @@
-﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui;
 using CropSense.Contracts;
+using UraniumUI;
 using CropSense.Inference;
 using CropSense.Services;
 using CropSense.State;
@@ -18,6 +19,9 @@ public static class MauiProgram
 		builder
 			.UseMauiApp<App>()
 			.UseMauiCommunityToolkit()
+			.UseMauiCommunityToolkitCamera()
+			.UseUraniumUI()
+			.UseUraniumUIBlurs()
 			.ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -32,6 +36,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<ITreatmentRecommendationService, TreatmentRecommendationService>();
 
 		builder.Services.AddTransient<HomeViewModel>();
+		builder.Services.AddTransient<CropViewViewModel>();
 		builder.Services.AddTransient<CaptureViewModel>();
 		builder.Services.AddTransient<ResultViewModel>();
 		builder.Services.AddTransient<SettingsViewModel>();

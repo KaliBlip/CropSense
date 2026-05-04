@@ -25,14 +25,19 @@ public partial class ResultPage : ContentPage
 		_viewModel.RefreshFromSession();
 	}
 
-	private async void OnTreatmentClicked(object? sender, EventArgs e)
+	private async void OnTreatmentTapped(object? sender, EventArgs e)
 	{
 		await Shell.Current.GoToAsync("treatment");
 	}
 
-	private async void OnPreventionClicked(object? sender, EventArgs e)
+	private async void OnPreventionTapped(object? sender, EventArgs e)
 	{
 		await Shell.Current.GoToAsync("prevention");
+	}
+
+	private async void OnScrollTopTapped(object? sender, EventArgs e)
+	{
+		await ContentScroll.ScrollToAsync(0, 0, true);
 	}
 
 	private static T ResolveRequired<T>() where T : class

@@ -4,7 +4,11 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:CropSense.Views"
-    Title="CropSense">
+    Title="CropSense"
+    Shell.TabBarForegroundColor="#39FF14"
+    Shell.BackgroundColor="#141400"
+    Shell.TabBarUnselectedColor="#41433b"
+    Shell.TabBarTitleColor="#39FF14">
 
     <TabBar>
         <ShellContent
@@ -22,7 +26,7 @@
         <ShellContent
             Title="Profile"
             Route="settings"
-            ContentTemplate="{DataTemplate views:SettingsPage}" />
+            ContentTemplate="{DataTemplate views:ResultPage}" />
     </TabBar>
 
 </Shell>

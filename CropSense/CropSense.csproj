@@ -1,20 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-<<<<<<< HEAD
-		<TargetFrameworks>net10.0-android</TargetFrameworks>
-=======
-		<TargetFrameworks>net10.0-ios;net10.0-android;net10.0-maccatalyst</TargetFrameworks>
->>>>>>> 2dbfa00 (Add launch and task configurations for .NET development in VSCode)
-		<TargetFrameworks Condition="!$([MSBuild]::IsOSPlatform('linux'))">$(TargetFrameworks);net10.0-ios;net10.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks>net10.0-android;net10.0-ios;net10.0-maccatalyst</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net10.0-windows10.0.19041.0</TargetFrameworks>
-
-		<!-- Note for MacCatalyst:
-		The default runtime is maccatalyst-x64, except in Release config, in which case the default is maccatalyst-x64;maccatalyst-arm64.
-		When specifying both architectures, use the plural <RuntimeIdentifiers> instead of the singular <RuntimeIdentifier>.
-		The Mac App Store will NOT accept apps with ONLY maccatalyst-arm64 indicated;
-		either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
-		<!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
 
 		<OutputType>Exe</OutputType>
 		<RootNamespace>CropSense</RootNamespace>
@@ -51,10 +39,16 @@
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(TargetFramework)'=='net10.0-ios'">
+		<RuntimeIdentifiers Condition="'$(Configuration)'=='Debug'">iossimulator-x64</RuntimeIdentifiers>
+		<RuntimeIdentifiers Condition="'$(Configuration)'=='Release'">ios-arm64;iossimulator-x64</RuntimeIdentifiers>
+	</PropertyGroup>
+
 	<!-- iOS Debug (Development) -->
 	<PropertyGroup Condition="'$(TargetFramework)'=='net10.0-ios' and '$(Configuration)'=='Debug'">
 		<CodesignKey>Apple Development: David Otitiaku (XWZ27RK93J)</CodesignKey>
 		<CodesignProvision>General Profile</CodesignProvision>
+		<RunAOTCompilation>false</RunAOTCompilation>
 	</PropertyGroup>
 
 	<!-- iOS Release (Testing on Local Device) -->
@@ -95,14 +89,6 @@
 		<PackageReference Include="Supabase" Version="1.1.1" TrimMode="partial" />
 		<PackageReference Include="UraniumUI" Version="2.15.0" />
 		<PackageReference Include="UraniumUI.Blurs" Version="2.15.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-<<<<<<< HEAD
-=======
-	  <Folder Include="Model/" />
-	  <Folder Include="ViewModel/" />
->>>>>>> 2dbfa00 (Add launch and task configurations for .NET development in VSCode)
 	</ItemGroup>
 
 </Project>

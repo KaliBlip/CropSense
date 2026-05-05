@@ -14,13 +14,13 @@
         <ShellContent
             x:Name="HomeTab"
             Title="Home"
-            Icon="monitorplant.png"
+            Icon="home.png"
             Route="home"
             ContentTemplate="{DataTemplate views:HomePage}" />
         <ShellContent
             x:Name="CropsTab"
             Title="Crops"
-            Icon="bell.png"
+            Icon="monitorplant.png"
             Route="crop-view"
             ContentTemplate="{DataTemplate views:CropViewPage}" />
         <ShellContent

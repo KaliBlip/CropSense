@@ -50,15 +50,15 @@ public sealed partial class HomeViewModel : BaseViewModel
 		{
 			Title = "Watering Best Practices",
 			Subtitle = "Field Notes | Updated this week",
-			Image = "lettuce.png"
+			Image = "tomatooo.png"
 		});
 
 		QuickAccessItems.Add(new QuickAccessItem { Label = "Weather", IconImage = "weather.png" });
 		QuickAccessItems.Add(new QuickAccessItem { Label = "Monitor", IconImage = "monitorplant.png" });
-		QuickAccessItems.Add(new QuickAccessItem { Label = "Market", IconGlyph = "🛒" });
-		QuickAccessItems.Add(new QuickAccessItem { Label = "Community", IconGlyph = "💬" });
-		QuickAccessItems.Add(new QuickAccessItem { Label = "Add crop", IconGlyph = "➕" });
-		QuickAccessItems.Add(new QuickAccessItem { Label = "Supplies", IconGlyph = "🧺" });
+		QuickAccessItems.Add(new QuickAccessItem { Label = "Market", IconImage = "camera" });
+		QuickAccessItems.Add(new QuickAccessItem { Label = "Community", IconImage = "bell.png" });
+		QuickAccessItems.Add(new QuickAccessItem { Label = "Add crop", IconImage = "profile.png" });
+		QuickAccessItems.Add(new QuickAccessItem { Label = "Supplies", IconImage = "home.png" });
 
 		RecommendedItems.Add(new RecommendedItem
 		{
@@ -68,7 +68,7 @@ public sealed partial class HomeViewModel : BaseViewModel
 		RecommendedItems.Add(new RecommendedItem
 		{
 			Title = "Grow Brinjals throughout the year",
-			Image = "lettuce.png"
+			Image = "tomatoo.png"
 		});
 	}
 }

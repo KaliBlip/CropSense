@@ -13,35 +13,33 @@
         <toolkit:CameraView x:Name="Camera"
                             HorizontalOptions="Fill"
                             VerticalOptions="Fill"
-                            CameraFlashMode="Off" />
+                            CameraFlashMode="Off"/>
 
         <Grid RowDefinitions="Auto,*,Auto"
               SafeAreaEdges="None"
-              InputTransparent="True"
               HorizontalOptions="Fill"
               VerticalOptions="Fill">
 
             <!-- Back -->
             <HorizontalStackLayout Grid.Row="0"
-                                   Padding="20,52,20,12"
-                                   InputTransparent="True">
+                                   Padding="20,52,20,12">
                 <Border StrokeThickness="0"
                         BackgroundColor="#804A5C38"
                         HeightRequest="44"
                         WidthRequest="44"
                         InputTransparent="False">
                     <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="22" />
+                        <RoundRectangle CornerRadius="22"/>
                     </Border.StrokeShape>
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnBackClicked" />
+                        <TapGestureRecognizer Tapped="OnBackClicked"/>
                     </Border.GestureRecognizers>
                     <Label Text="‹"
                            FontSize="28"
                            TextColor="White"
                            HorizontalOptions="Center"
                            VerticalOptions="Center"
-                           Margin="0,-4,0,0" />
+                           Margin="0,-4,0,0"/>
                 </Border>
             </HorizontalStackLayout>
 
@@ -61,16 +59,24 @@
                           HeightRequest="48">
                         <Border StrokeThickness="0"
                                 BackgroundColor="White"
-                                WidthRequest="4"
+                                WidthRequest="6"
                                 HeightRequest="36"
                                 HorizontalOptions="Start"
-                                VerticalOptions="Start" />
+                                VerticalOptions="Start">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="50"/>
+                            </Border.StrokeShape>
+                        </Border>
                         <Border StrokeThickness="0"
                                 BackgroundColor="White"
                                 WidthRequest="36"
-                                HeightRequest="4"
+                                HeightRequest="6"
                                 HorizontalOptions="Start"
-                                VerticalOptions="Start" />
+                                VerticalOptions="Start">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="50"/>
+                            </Border.StrokeShape>
+                        </Border>
                     </Grid>
                     <Grid HorizontalOptions="End"
                           VerticalOptions="Start"
@@ -78,16 +84,24 @@
                           HeightRequest="48">
                         <Border StrokeThickness="0"
                                 BackgroundColor="White"
-                                WidthRequest="4"
+                                WidthRequest="6"
                                 HeightRequest="36"
                                 HorizontalOptions="End"
-                                VerticalOptions="Start" />
+                                VerticalOptions="Start">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="50"/>
+                            </Border.StrokeShape>
+                        </Border>
                         <Border StrokeThickness="0"
                                 BackgroundColor="White"
                                 WidthRequest="36"
-                                HeightRequest="4"
+                                HeightRequest="6"
                                 HorizontalOptions="End"
-                                VerticalOptions="Start" />
+                                VerticalOptions="Start">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="50"/>
+                            </Border.StrokeShape>
+                        </Border>
                     </Grid>
                     <Grid HorizontalOptions="Start"
                           VerticalOptions="End"
@@ -95,16 +109,24 @@
                           HeightRequest="48">
                         <Border StrokeThickness="0"
                                 BackgroundColor="White"
-                                WidthRequest="4"
+                                WidthRequest="6"
                                 HeightRequest="36"
                                 HorizontalOptions="Start"
-                                VerticalOptions="End" />
+                                VerticalOptions="End">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="50"/>
+                            </Border.StrokeShape>
+                        </Border>
                         <Border StrokeThickness="0"
                                 BackgroundColor="White"
                                 WidthRequest="36"
-                                HeightRequest="4"
+                                HeightRequest="6"
                                 HorizontalOptions="Start"
-                                VerticalOptions="End" />
+                                VerticalOptions="End">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="50"/>
+                            </Border.StrokeShape>
+                        </Border>
                     </Grid>
                     <Grid HorizontalOptions="End"
                           VerticalOptions="End"
@@ -112,16 +134,24 @@
                           HeightRequest="48">
                         <Border StrokeThickness="0"
                                 BackgroundColor="White"
-                                WidthRequest="4"
+                                WidthRequest="6"
                                 HeightRequest="36"
                                 HorizontalOptions="End"
-                                VerticalOptions="End" />
+                                VerticalOptions="End">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="50"/>
+                            </Border.StrokeShape>
+                        </Border>
                         <Border StrokeThickness="0"
                                 BackgroundColor="White"
                                 WidthRequest="36"
-                                HeightRequest="4"
+                                HeightRequest="6"
                                 HorizontalOptions="End"
-                                VerticalOptions="End" />
+                                VerticalOptions="End">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="50"/>
+                            </Border.StrokeShape>
+                        </Border>
                     </Grid>
                 </Grid>
 
@@ -134,14 +164,18 @@
                         Opacity="0.45"
                         InputTransparent="True">
                     <Border.Background>
-                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                            <GradientStop Color="#00000000" Offset="0" />
-                            <GradientStop Color="#55FFFFFF" Offset="0.5" />
-                            <GradientStop Color="#00000000" Offset="1" />
+                        <LinearGradientBrush StartPoint="0,0.5"
+                                EndPoint="1,0.5">
+                            <GradientStop Color="#00000000"
+                                    Offset="0"/>
+                            <GradientStop Color="#55FFFFFF"
+                                    Offset="0.5"/>
+                            <GradientStop Color="#00000000"
+                                    Offset="1"/>
                         </LinearGradientBrush>
                     </Border.Background>
                     <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="6" />
+                        <RoundRectangle CornerRadius="6"/>
                     </Border.StrokeShape>
                 </Border>
             </Grid>
@@ -150,26 +184,25 @@
             <Grid Grid.Row="2"
                   ColumnDefinitions="*,Auto,*"
                   Padding="28,0,28,40"
-                  VerticalOptions="End"
-                  InputTransparent="True">
+                  VerticalOptions="End">
                 <Border Grid.Column="0"
                         StrokeThickness="2"
                         Stroke="#44FFFFFF"
-                        HeightRequest="56"
-                        WidthRequest="56"
+                        HeightRequest="60"
+                        WidthRequest="60"
                         HorizontalOptions="Start"
                         VerticalOptions="Center"
                         InputTransparent="False">
                     <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="28" />
+                        <RoundRectangle CornerRadius="28"/>
                     </Border.StrokeShape>
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnGalleryClicked" />
+                        <TapGestureRecognizer Tapped="OnGalleryClicked"/>
                     </Border.GestureRecognizers>
                     <Image x:Name="GalleryThumbnail"
                            Source="lettuce.png"
                            Aspect="AspectFill"
-                           Margin="3" />
+                           Margin="3"/>
                 </Border>
 
                 <Grid Grid.Column="1"
@@ -184,7 +217,7 @@
                             WidthRequest="84"
                             BackgroundColor="Transparent">
                         <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="42" />
+                            <RoundRectangle CornerRadius="42"/>
                         </Border.StrokeShape>
                     </Border>
                     <Border StrokeThickness="0"
@@ -194,33 +227,33 @@
                             HorizontalOptions="Center"
                             VerticalOptions="Center">
                         <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="32" />
+                            <RoundRectangle CornerRadius="32"/>
                         </Border.StrokeShape>
                     </Border>
                     <Grid.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnShutterClicked" />
+                        <TapGestureRecognizer Tapped="OnShutterClicked"/>
                     </Grid.GestureRecognizers>
                 </Grid>
 
                 <Border Grid.Column="2"
                         StrokeThickness="0"
                         BackgroundColor="#66333333"
-                        HeightRequest="56"
-                        WidthRequest="56"
+                        HeightRequest="60"
+                        WidthRequest="60"
                         HorizontalOptions="End"
                         VerticalOptions="Center"
                         InputTransparent="False">
                     <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="28" />
+                        <RoundRectangle CornerRadius="28"/>
                     </Border.StrokeShape>
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnSwitchCameraClicked" />
+                        <TapGestureRecognizer Tapped="OnSwitchCameraClicked"/>
                     </Border.GestureRecognizers>
-                    <Label Text="⟳"
-                           FontSize="26"
-                           TextColor="White"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center" />
+                    <Image Source="camera.png"
+                           Aspect="AspectFit"
+                           HeightRequest="24"
+                           WidthRequest="24"/>
+
                 </Border>
             </Grid>
         </Grid>

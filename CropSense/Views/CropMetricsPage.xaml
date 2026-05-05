@@ -3,37 +3,297 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CropSense.Views.CropMetricsPage"
              Shell.NavBarIsVisible="False"
-             Title="Crop Metrics">
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="12">
-            <Label Text="Tomato Crop" Style="{StaticResource Headline}" />
-            <Label Text="Farm 13-A • Healthy" Style="{StaticResource SubHeadline}" />
-            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="10">
-                <Border Grid.Row="0" Grid.Column="0" StrokeShape="RoundRectangle 14" Padding="12">
-                    <VerticalStackLayout>
-                        <Label Text="Temp." />
-                        <Label Text="25 C" FontSize="24" />
-                    </VerticalStackLayout>
-                </Border>
-                <Border Grid.Row="0" Grid.Column="1" StrokeShape="RoundRectangle 14" Padding="12">
-                    <VerticalStackLayout>
-                        <Label Text="Humidity" />
-                        <Label Text="40%" FontSize="24" />
-                    </VerticalStackLayout>
-                </Border>
-                <Border Grid.Row="1" Grid.Column="0" StrokeShape="RoundRectangle 14" Padding="12">
-                    <VerticalStackLayout>
-                        <Label Text="Light" />
-                        <Label Text="8000 lx" FontSize="24" />
-                    </VerticalStackLayout>
-                </Border>
-                <Border Grid.Row="1" Grid.Column="1" StrokeShape="RoundRectangle 14" Padding="12">
-                    <VerticalStackLayout>
-                        <Label Text="Soil Moisture" />
-                        <Label Text="35%" FontSize="24" />
-                    </VerticalStackLayout>
-                </Border>
+             SafeAreaEdges="None"
+             Title="Crop Metrics"
+             BackgroundColor="#141400">
+
+    <Grid SafeAreaEdges="None"
+          RowDefinitions="*">
+        <Image Grid.Row="0"
+               Source="darkbackground.png"
+               Aspect="AspectFill"
+               HorizontalOptions="Fill"
+               VerticalOptions="Fill"/>
+
+        <ScrollView Grid.Row="0">
+            <Grid Padding="16,24,16,24"
+                  RowDefinitions="Auto,Auto,Auto,Auto"
+                  RowSpacing="16">
+                <Grid Grid.Row="0"
+                      ColumnDefinitions="Auto,*,Auto,Auto"
+                      ColumnSpacing="12">
+                    <Border Grid.Column="0"
+                            StrokeThickness="0"
+                            BackgroundColor="#80484a40"
+                            WidthRequest="60"
+                            HeightRequest="60">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="999"/>
+                        </Border.StrokeShape>
+                        <Image Source="back.png"
+                               HeightRequest="30"
+                               WidthRequest="30"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnBackTapped"/>
+                        </Border.GestureRecognizers>
+                    </Border>
+
+                    <Grid Grid.Column="2"
+                          ColumnDefinitions="Auto,Auto"
+                          ColumnSpacing="10">
+                        <Border Grid.Column="0"
+                                StrokeThickness="0"
+                                BackgroundColor="#80484a40"
+                                WidthRequest="60"
+                                HeightRequest="60">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="999"/>
+                            </Border.StrokeShape>
+                            <Label Text="↗"
+                                   FontSize="22"
+                                   TextColor="White"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+                        </Border>
+                        <Border Grid.Column="1"
+                                StrokeThickness="0"
+                                BackgroundColor="#80484a40"
+                                WidthRequest="60"
+                                HeightRequest="60">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="999"/>
+                            </Border.StrokeShape>
+                            <Image Source="chat.png"
+                                   HeightRequest="30"
+                                   WidthRequest="30"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+                        </Border>
+                    </Grid>
+                </Grid>
+
+                <Grid Grid.Row="1"
+                      RowDefinitions="Auto,Auto"
+                      RowSpacing="4">
+                    <Label Grid.Row="0"
+                           Text="Tomato Crop"
+                           TextColor="White"
+                           FontSize="44"
+                           FontAttributes="Bold"/>
+                    <Grid Grid.Row="1"
+                          ColumnDefinitions="Auto,Auto,Auto"
+                          ColumnSpacing="8"
+                          VerticalOptions="Center">
+                        <Label Grid.Column="0"
+                               Text="Farm 13-A"
+                               TextColor="#D6D6D6"
+                               FontSize="28"/>
+                        <Label Grid.Column="1"
+                               Text="●"
+                               TextColor="#00E36E"
+                               FontSize="14"
+                               VerticalTextAlignment="Center"/>
+                        <Label Grid.Column="2"
+                               Text="Healthy"
+                               TextColor="#D6D6D6"
+                               FontSize="24"/>
+                    </Grid>
+                </Grid>
+
+                <Grid Grid.Row="2">
+                    <Border StrokeThickness="0"
+                            Padding="0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="30"/>
+                        </Border.StrokeShape>
+                        <Grid RowDefinitions="Auto,*">
+                            <Grid Grid.Row="0"
+                                  ColumnDefinitions="Auto,*"
+                                  Margin="12,12,12,12"
+                                  ZIndex="2">
+                                <Border Grid.Column="0"
+                                        StrokeThickness="0"
+                                        BackgroundColor="#806C6C5A"
+                                        Padding="15,5">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="999"/>
+                                    </Border.StrokeShape>
+                                    <Label Text="◷ 2024-01-08 12:00:00"
+                                           TextColor="#E6E6E6"
+                                           FontAttributes="Bold"
+                                           FontSize="14"/>
+                                </Border>
+                            </Grid>
+
+                            <Image Grid.RowSpan="2"
+                                   Source="tomato.png"
+                                   Aspect="AspectFill"
+                                   HeightRequest="280"
+                                   HorizontalOptions="Fill"
+                                   VerticalOptions="Fill"/>
+
+                            <Border Grid.Row="0"
+                                    HorizontalOptions="End"
+                                    VerticalOptions="Start"
+                                    Margin="0,12,12,0"
+                                    StrokeThickness="0"
+                                    BackgroundColor="#F0F0F0"
+                                    WidthRequest="52"
+                                    HeightRequest="52"
+                                    ZIndex="3">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="26"/>
+                                </Border.StrokeShape>
+                                <Label Text="⌄"
+                                       FontSize="20"
+                                       TextColor="#111111"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Row="3"
+                      RowDefinitions="Auto,Auto"
+                      ColumnDefinitions="*,*"
+                      ColumnSpacing="15"
+                      RowSpacing="15">
+                    <Border Grid.Row="0"
+                            Grid.Column="0"
+                            StrokeThickness="0"
+                            HeightRequest="190"
+                            BackgroundColor="#70484A40"
+                            Padding="16">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="30"/>
+                        </Border.StrokeShape>
+                        <Grid RowDefinitions="*,Auto"
+                              RowSpacing="12">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Grid.Column="0"
+                                       Text="Temp."
+                                       TextColor="#D6D6D6"
+                                       FontSize="20"/>
+                                <Label Grid.Column="1"
+                                       Text="🌡"
+                                       TextColor="#F39C12"
+                                       FontSize="22"/>
+                            </Grid>
+                            <Grid Grid.Row="1"
+                                  ColumnDefinitions="Auto,*"
+                                  ColumnSpacing="2">
+                                <Label Grid.Column="0"
+                                       Text="25"
+                                       TextColor="White"
+                                       FontSize="48"/>
+                                <Label Grid.Column="1"
+                                       Text="°C"
+                                       TextColor="#E6E6E6"
+                                       FontSize="24"
+                                       VerticalOptions="End"
+                                       Margin="0,0,0,8"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Row="0"
+                            Grid.Column="1"
+                            StrokeThickness="0"
+                            HeightRequest="190"
+                            BackgroundColor="#70484A40"
+                            Padding="16">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="30"/>
+                        </Border.StrokeShape>
+                        <Grid RowDefinitions="*,Auto"
+                              RowSpacing="12">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Grid.Column="0"
+                                       Text="Humidity"
+                                       TextColor="#D6D6D6"
+                                       FontSize="20"/>
+                                <Label Grid.Column="1"
+                                       Text="◔"
+                                       TextColor="#00E36E"
+                                       FontSize="22"/>
+                            </Grid>
+                            <Label Grid.Row="1"
+                                   Text="40%"
+                                   TextColor="White"
+                                   FontSize="48"/>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Row="1"
+                            Grid.Column="0"
+                            StrokeThickness="0"
+                            HeightRequest="190"
+                            BackgroundColor="#70484A40"
+                            Padding="16">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="30"/>
+                        </Border.StrokeShape>
+                        <Grid RowDefinitions="*,Auto"
+                              RowSpacing="12">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Grid.Column="0"
+                                       Text="Light"
+                                       TextColor="#D6D6D6"
+                                       FontSize="20"/>
+                                <Label Grid.Column="1"
+                                       Text="☼"
+                                       TextColor="#00E36E"
+                                       FontSize="22"/>
+                            </Grid>
+                            <Grid Grid.Row="1"
+                                  ColumnDefinitions="Auto,*"
+                                  ColumnSpacing="4">
+                                <Label Grid.Column="0"
+                                       Text="8000"
+                                       TextColor="White"
+                                       FontSize="48"/>
+                                <Label Grid.Column="1"
+                                       Text="lux"
+                                       TextColor="#E6E6E6"
+                                       FontSize="22"
+                                       VerticalOptions="End"
+                                       Margin="0,0,0,8"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Row="1"
+                            Grid.Column="1"
+                            StrokeThickness="0"
+                            HeightRequest="190"
+                            BackgroundColor="#70484A40"
+                            Padding="16">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="30"/>
+                        </Border.StrokeShape>
+                        <Grid RowDefinitions="*,Auto"
+                              RowSpacing="12">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Grid.Column="0"
+                                       Text="Soil Moisture"
+                                       TextColor="#D6D6D6"
+                                       FontSize="20"/>
+                                <Label Grid.Column="1"
+                                       Text="⚘"
+                                       TextColor="#00E36E"
+                                       FontSize="20"/>
+                            </Grid>
+                            <Label Grid.Row="1"
+                                   Text="35%"
+                                   TextColor="White"
+                                   FontSize="48"/>
+                        </Grid>
+                    </Border>
+                </Grid>
             </Grid>
-        </VerticalStackLayout>
-    </ScrollView>
+        </ScrollView>
+    </Grid>
 </ContentPage>

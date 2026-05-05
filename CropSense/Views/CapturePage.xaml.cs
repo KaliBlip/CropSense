@@ -9,6 +9,10 @@ public partial class CapturePage : ContentPage
 {
 	private IReadOnlyList<CameraInfo>? _availableCameras;
 	private CancellationTokenSource? _captureCts;
+	private CancellationTokenSource? _previewCts;
+	private bool _isCameraPreviewRunning;
+	private bool _isCapturing;
+	private bool _isPickingGalleryImage;
 	private IDispatcherTimer? _scanTimer;
 	private double _scanVelocity = 2.8;
 	private EventHandler? _scanTickHandler;
@@ -28,27 +32,49 @@ public partial class CapturePage : ContentPage
 	{
 		base.OnAppearing();
 
-		Camera.MediaCaptured -= OnMediaCaptured;
-		Camera.MediaCaptured += OnMediaCaptured;
-		Camera.MediaCaptureFailed -= OnMediaCaptureFailed;
-		Camera.MediaCaptureFailed += OnMediaCaptureFailed;
-
-		var cameraStatus = await Permissions.RequestAsync<Permissions.Camera>();
-		if (cameraStatus != PermissionStatus.Granted)
+		try
 		{
-			await DisplayAlertAsync("Camera", "Camera permission is required to scan crop leaves.", "OK");
-			return;
-		}
+			Camera.MediaCaptured -= OnMediaCaptured;
+			Camera.MediaCaptured += OnMediaCaptured;
+			Camera.MediaCaptureFailed -= OnMediaCaptureFailed;
+			Camera.MediaCaptureFailed += OnMediaCaptureFailed;
 
-		StartScanAnimation();
+			var cameraStatus = await Permissions.RequestAsync<Permissions.Camera>();
+			if (cameraStatus != PermissionStatus.Granted)
+			{
+				await DisplayAlertAsync("Camera", "Camera permission is required to scan crop leaves.", "OK");
+				return;
+			}
+
+			var previewReady = await InitializeCameraPreviewAsync();
+			if (!previewReady)
+			{
+				await DisplayAlertAsync("Camera", "Unable to start camera preview.", "OK");
+				return;
+			}
+
+			StartScanAnimation();
+		}
+		catch (Exception ex)
+		{
+			await DisplayAlertAsync("Camera", ex.Message, "OK");
+		}
 	}
 
-	protected override void OnDisappearing()
+	protected override async void OnDisappearing()
 	{
 		base.OnDisappearing();
-		StopScanAnimation();
-		Camera.MediaCaptured -= OnMediaCaptured;
-		Camera.MediaCaptureFailed -= OnMediaCaptureFailed;
+		try
+		{
+			StopScanAnimation();
+			Camera.MediaCaptured -= OnMediaCaptured;
+			Camera.MediaCaptureFailed -= OnMediaCaptureFailed;
+			await StopCameraPreviewSafeAsync();
+		}
+		catch
+		{
+			// Avoid teardown exceptions crashing navigation on platform-specific handler disposal.
+		}
 	}
 
 	private void StartScanAnimation()
@@ -115,9 +141,22 @@ public partial class CapturePage : ContentPage
 
 	private async void OnShutterClicked(object? sender, EventArgs e)
 	{
+		if (_isCapturing)
+			return;
+
 		try
 		{
+			_isCapturing = true;
+
+			var previewReady = _isCameraPreviewRunning || await InitializeCameraPreviewAsync();
+			if (!previewReady)
+			{
+				await DisplayAlertAsync("Camera", "Camera is not ready yet. Please try again.", "OK");
+				return;
+			}
+
 			_captureCts?.Cancel();
+			_captureCts?.Dispose();
 			_captureCts = new CancellationTokenSource(TimeSpan.FromSeconds(12));
 			await Camera.CaptureImage(_captureCts.Token);
 		}
@@ -129,21 +168,34 @@ public partial class CapturePage : ContentPage
 		{
 			await DisplayAlertAsync("Capture", ex.Message, "OK");
 		}
+		finally
+		{
+			_isCapturing = false;
+		}
 	}
 
 	private async void OnGalleryClicked(object? sender, EventArgs e)
 	{
+		if (_isPickingGalleryImage)
+			return;
+
 		try
 		{
-			var photos = await MediaPicker.Default.PickPhotosAsync(new MediaPickerOptions
+			_isPickingGalleryImage = true;
+			var hasPermission = await EnsureGalleryPermissionAsync();
+			if (!hasPermission)
+			{
+				await DisplayAlertAsync("Gallery", "Photo access permission is required.", "OK");
+				return;
+			}
+
+			var photo = await MediaPicker.Default.PickPhotoAsync(new MediaPickerOptions
 			{
 				Title = "Choose a leaf photo"
 			});
 
-			if (photos is null || photos.Count == 0)
+			if (photo is null)
 				return;
-
-			var photo = photos[0];
 
 			var path = await ResolvePickedPhotoPathAsync(photo);
 			if (string.IsNullOrEmpty(path))
@@ -154,9 +206,21 @@ public partial class CapturePage : ContentPage
 			if (BindingContext is CaptureViewModel vm)
 				await vm.AnalyzeImageAtAsync(path);
 		}
+		catch (FeatureNotSupportedException)
+		{
+			await DisplayAlertAsync("Gallery", "Photo picking is not supported on this device.", "OK");
+		}
+		catch (PermissionException)
+		{
+			await DisplayAlertAsync("Gallery", "Photo access permission is required.", "OK");
+		}
 		catch (Exception ex)
 		{
 			await DisplayAlertAsync("Gallery", ex.Message, "OK");
+		}
+		finally
+		{
+			_isPickingGalleryImage = false;
 		}
 	}
 
@@ -164,27 +228,30 @@ public partial class CapturePage : ContentPage
 	{
 		try
 		{
-			_availableCameras ??= await Camera.GetAvailableCameras(CancellationToken.None);
-			if (_availableCameras.Count < 2)
+			var cameras = (await Camera.GetAvailableCameras(CancellationToken.None)).ToList();
+			_availableCameras = cameras;
+			if (cameras.Count < 2)
 				return;
 
 			var current = Camera.SelectedCamera;
-			CameraInfo? next = null;
+			var currentIndex = current is null ? -1 : cameras.IndexOf(current);
 
-			if (current?.Position == CameraPosition.Rear)
-				next = _availableCameras.FirstOrDefault(c => c.Position == CameraPosition.Front);
-			else if (current?.Position == CameraPosition.Front)
-				next = _availableCameras.FirstOrDefault(c => c.Position == CameraPosition.Rear);
+			// Some platforms return a new CameraInfo instance each query, so IndexOf can fail.
+			if (currentIndex < 0 && current is not null && current.Position != CameraPosition.Unknown)
+				currentIndex = cameras.FindIndex(c => c.Position == current.Position);
 
-			if (next is not null)
+			var nextIndex = currentIndex < 0 ? 0 : (currentIndex + 1) % cameras.Count;
+
+			// Prefer true front/rear flips when the current position is known.
+			if (current is not null && current.Position != CameraPosition.Unknown)
 			{
-				Camera.SelectedCamera = next;
-				return;
+				var oppositeIndex = cameras.FindIndex(c => c.Position != CameraPosition.Unknown && c.Position != current.Position);
+				if (oppositeIndex >= 0)
+					nextIndex = oppositeIndex;
 			}
 
-			var list = _availableCameras.ToList();
-			var idx = current is null ? 0 : Math.Max(0, list.IndexOf(current));
-			Camera.SelectedCamera = list[(idx + 1) % list.Count];
+			Camera.SelectedCamera = cameras[nextIndex];
+			await RestartCameraPreviewAsync();
 		}
 		catch (Exception ex)
 		{
@@ -208,6 +275,118 @@ public partial class CapturePage : ContentPage
 		await read.CopyToAsync(write);
 		await write.FlushAsync();
 		return path;
+	}
+
+	private static async Task<bool> EnsureGalleryPermissionAsync()
+	{
+		if (DeviceInfo.Platform == DevicePlatform.iOS || DeviceInfo.Platform == DevicePlatform.MacCatalyst)
+		{
+			var status = await Permissions.CheckStatusAsync<Permissions.Photos>();
+			if (status != PermissionStatus.Granted)
+				status = await Permissions.RequestAsync<Permissions.Photos>();
+			return status == PermissionStatus.Granted || status == PermissionStatus.Limited;
+		}
+
+		if (DeviceInfo.Platform == DevicePlatform.Android)
+		{
+			var storageStatus = await Permissions.CheckStatusAsync<Permissions.StorageRead>();
+			if (storageStatus != PermissionStatus.Granted)
+				storageStatus = await Permissions.RequestAsync<Permissions.StorageRead>();
+			return storageStatus == PermissionStatus.Granted;
+		}
+
+		return true;
+	}
+
+	private async Task<bool> EnsureCameraReadyAsync()
+	{
+		var hasHandler = await WaitForCameraHandlerAsync();
+		if (!hasHandler)
+			return false;
+
+		_availableCameras = await Camera.GetAvailableCameras(CancellationToken.None);
+		if (_availableCameras.Count == 0)
+			return false;
+
+		if (Camera.SelectedCamera is null)
+		{
+			var preferredRear = _availableCameras.FirstOrDefault(c => c.Position == CameraPosition.Rear);
+			Camera.SelectedCamera = preferredRear ?? _availableCameras[0];
+		}
+
+		return Camera.SelectedCamera is not null;
+	}
+
+	private async Task<bool> InitializeCameraPreviewAsync()
+	{
+		var hasHandler = await WaitForCameraHandlerAsync();
+		if (!hasHandler)
+			return false;
+
+		var cameraReady = await EnsureCameraReadyAsync();
+		if (!cameraReady)
+			return false;
+
+		_previewCts?.Cancel();
+		_previewCts?.Dispose();
+		_previewCts = new CancellationTokenSource(TimeSpan.FromSeconds(15));
+
+		try
+		{
+			await Camera.StartCameraPreview(_previewCts.Token);
+			_isCameraPreviewRunning = true;
+			return true;
+		}
+		catch (OperationCanceledException)
+		{
+			_isCameraPreviewRunning = false;
+			return false;
+		}
+		catch
+		{
+			_isCameraPreviewRunning = false;
+			throw;
+		}
+	}
+
+	private async Task<bool> WaitForCameraHandlerAsync()
+	{
+		if (Camera.Handler is not null)
+			return true;
+
+		for (var i = 0; i < 20; i++)
+		{
+			await Task.Delay(50);
+			if (Camera.Handler is not null)
+				return true;
+		}
+
+		return false;
+	}
+
+	private async Task RestartCameraPreviewAsync()
+	{
+		await StopCameraPreviewSafeAsync();
+		await InitializeCameraPreviewAsync();
+	}
+
+	private Task StopCameraPreviewSafeAsync()
+	{
+		try
+		{
+			Camera.StopCameraPreview();
+		}
+		catch
+		{
+			// Ignore platform-specific stop failures when page is disappearing.
+		}
+
+		_previewCts?.Cancel();
+		_previewCts?.Dispose();
+		_previewCts = null;
+		_isCameraPreviewRunning = false;
+
+		return Task.CompletedTask;
 	}
 
 	private static T ResolveRequired<T>() where T : class

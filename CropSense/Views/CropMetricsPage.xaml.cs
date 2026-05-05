@@ -6,4 +6,12 @@ public partial class CropMetricsPage : ContentPage
 	{
 		InitializeComponent();
 	}
+
+	private async void OnBackTapped(object? sender, TappedEventArgs e)
+	{
+		if (Shell.Current is not null)
+		{
+			await Shell.Current.GoToAsync("..");
+		}
+	}
 }

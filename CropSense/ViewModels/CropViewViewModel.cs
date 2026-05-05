@@ -7,7 +7,7 @@ public sealed class FeaturedCropItem
 {
 	public string Title { get; init; } = string.Empty;
 	public string Subtitle { get; init; } = string.Empty;
-	public string Image { get; init; } = "lettuce.png";
+	public string Image { get; init; } = "tomato.png";
 	public string BadgeGlyph { get; init; } = "🌱";
 }
 
@@ -20,7 +20,7 @@ public sealed class CropHeroActionItem
 public sealed class CameraCardItem
 {
 	public string Title { get; init; } = string.Empty;
-	public string Image { get; init; } = "lettuce.png";
+	public string Image { get; init; } = "tomatoo.png";
 }
 
 public sealed partial class CropViewViewModel : BaseViewModel
@@ -39,7 +39,7 @@ public sealed partial class CropViewViewModel : BaseViewModel
 		{
 			Title = "Tomato — Field A",
 			Subtitle = "Last seen today · Green Valley Farm",
-			Image = "lettuce.png",
+			Image = "tomatoo.png",
 			BadgeGlyph = "🌱"
 		};
 
@@ -49,9 +49,9 @@ public sealed partial class CropViewViewModel : BaseViewModel
 		HeroActions.Add(new CropHeroActionItem { IconGlyph = "💡", ActionId = "light" });
 		HeroActions.Add(new CropHeroActionItem { IconGlyph = "📶", ActionId = "signal" });
 
-		CameraCards.Add(new CameraCardItem { Title = "North bed", Image = "lettuce.png" });
-		CameraCards.Add(new CameraCardItem { Title = "South row", Image = "monitorplant.png" });
-		CameraCards.Add(new CameraCardItem { Title = "Greenhouse", Image = "lettuce.png" });
+		CameraCards.Add(new CameraCardItem { Title = "North bed", Image = "tomato.png" });
+		CameraCards.Add(new CameraCardItem { Title = "South row", Image = "tomatoo.png" });
+		CameraCards.Add(new CameraCardItem { Title = "Greenhouse", Image = "tomatooo.png" });
 		CameraCards.Add(new CameraCardItem { Title = "Irrigation cam", Image = "lettuce.png" });
 	}
 

@@ -27,20 +27,21 @@
 
             <ScrollView x:Name="ContentScroll"
                         Grid.Row="0">
-                <VerticalStackLayout Padding="24,48,24,120"
+                <VerticalStackLayout Padding="0,24,0,120"
                                      Spacing="24">
 
                     <!-- Header: back + bookmark + share -->
                     <Grid ColumnDefinitions="Auto,*,Auto"
+                          Padding="24,0"
                           ColumnSpacing="12">
                         <Border Grid.Column="0"
                                 StrokeThickness="0"
                                 BackgroundColor="#80484a40"
-                                WidthRequest="44"
-                                HeightRequest="44"
+                                WidthRequest="60"
+                                HeightRequest="60"
                                 VerticalOptions="Start">
                             <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="22" />
+                                <RoundRectangle CornerRadius="999" />
                             </Border.StrokeShape>
                             <Grid>
                                 <Label Text="‹"
@@ -96,7 +97,7 @@
                     </Grid>
 
                     <!-- Title block -->
-                    <VerticalStackLayout Spacing="8">
+                    <VerticalStackLayout Spacing="8" Padding="24,0">
                         <Label Text="{Binding PredictionLabel}"
                                TextColor="White"
                                FontSize="28"
@@ -116,37 +117,42 @@
                         </HorizontalStackLayout>
                     </VerticalStackLayout>
 
-                    <!-- Hero carousel -->
-                    <Grid RowDefinitions="Auto,Auto"
-                          RowSpacing="8">
-                        <IndicatorView x:Name="ResultIndicators"
+                        <!--<IndicatorView x:Name="ResultIndicators"
                                        Grid.Row="1"
                                        IndicatorColor="#444444"
                                        SelectedIndicatorColor="#39FF14"
                                        IndicatorsShape="Circle"
                                        HorizontalOptions="Center"
-                                       MaximumVisible="6" />
+                                       MaximumVisible="6" />-->
+
+
+                    <!--IndicatorView="{x:Reference ResultIndicators}"-->
+
+
+                    <!-- Hero carousel -->
+                    <Grid RowDefinitions="Auto,Auto"
+                          Padding="0,0"
+                          RowSpacing="8">
                         <CarouselView Grid.Row="0"
                                       ItemsSource="{Binding HeroSlides}"
-                                      HeightRequest="280"
-                                      PeekAreaInsets="48"
-                                      HorizontalOptions="Fill"
-                                      IndicatorView="{x:Reference ResultIndicators}">
+                                      HeightRequest="350"
+                                      PeekAreaInsets="24"
+                                      HorizontalOptions="Fill">
                             <CarouselView.ItemsLayout>
                                 <LinearItemsLayout Orientation="Horizontal"
-                                                   ItemSpacing="0" />
+                                                   ItemSpacing="5" />
                             </CarouselView.ItemsLayout>
                             <CarouselView.ItemTemplate>
                                 <DataTemplate x:DataType="local:ResultHeroSlideItem">
                                     <Border StrokeThickness="0"
-                                            Margin="8,0"
+                                            Margin="1,0"
                                             HorizontalOptions="Center">
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="40" />
                                         </Border.StrokeShape>
                                         <Image Source="{Binding Photo}"
                                                Aspect="AspectFill"
-                                               HeightRequest="280"
+                                               HeightRequest="600"
                                                HorizontalOptions="Fill" />
                                     </Border>
                                 </DataTemplate>
@@ -155,7 +161,7 @@
                     </Grid>
 
                     <!-- Description -->
-                    <VerticalStackLayout Spacing="12">
+                    <VerticalStackLayout Spacing="12" Padding="24,0">
                         <Label Text="Description"
                                TextColor="White"
                                FontSize="18"
@@ -167,7 +173,7 @@
                     </VerticalStackLayout>
 
                     <!-- Key facts -->
-                    <VerticalStackLayout Spacing="14">
+                    <VerticalStackLayout Spacing="14" Padding="25">
                         <Label Text="Key Facts"
                                TextColor="White"
                                FontSize="18"
@@ -196,7 +202,7 @@
                     </VerticalStackLayout>
 
                     <!-- Treatment / prevention -->
-                    <HorizontalStackLayout Spacing="24"
+                    <HorizontalStackLayout Spacing="24" Padding="24,0"
                                            HorizontalOptions="Center">
                         <Label Text="Treatment"
                                TextColor="#39FF14"

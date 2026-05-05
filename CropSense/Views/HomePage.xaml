@@ -1,294 +1,367 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:CropSense.ViewModels"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
-             x:Class="CropSense.Views.HomePage"
-             Shell.NavBarIsVisible="False"
-             Title="Home"
-             SafeAreaEdges="None"
-             BackgroundColor="#141400">
-
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:CropSense.ViewModels" xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit" xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+	x:Class="CropSense.Views.HomePage"
+	Shell.NavBarIsVisible="False"
+	Title="Home"
+	SafeAreaEdges="None"
+	BackgroundColor="#141400">
     <ContentPage.Resources>
-        <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        <toolkit:InvertedBoolConverter
+			x:Key="InvertedBoolConverter" />
     </ContentPage.Resources>
-
-    <Grid SafeAreaEdges="None" RowDefinitions="*" HorizontalOptions="Fill" VerticalOptions="Fill">
-
-        <Image Grid.Row="0"
-               Source="darkbackground.png"
-               Aspect="AspectFill"
-               HorizontalOptions="Fill"
-               VerticalOptions="Fill"
-               ZIndex="0" />
-
-        <Grid Grid.Row="0"
-              SafeAreaEdges="None"
-              ZIndex="1"
-              RowDefinitions="*">
-        <ScrollView Grid.Row="0">
-            <VerticalStackLayout Spacing="20">
-
-                <!-- Header: weather capsule, notification, profile (UraniumUI blur on layouts per Android guidance) -->
-                <Grid ColumnDefinitions="Auto,*" VerticalOptions="Start" Padding="16">
-                        
-                                <Border StrokeThickness="0"
-                                Padding="10,10"
-                                        BackgroundColor="#484a40"
-                                VerticalOptions="Center">
-                                    <Border.StrokeShape>
-                                        <RoundRectangle CornerRadius="999" />
-                                    </Border.StrokeShape>
-                                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="25" 
-                                          VerticalOptions="Center">
-                                        <Image Grid.Column="0"
-                                       Source="cloud.png"
-                                       WidthRequest="40"
-                                       HeightRequest="40"
-                                       Aspect="AspectFit"
-                                       VerticalOptions="Center" />
-                                        
-                                        <VerticalStackLayout Grid.Column="1" 
-                                                             Spacing="2" VerticalOptions="Center">
-                                            <Label Text="Bhopal"
-                                           TextColor="White"
-                                           FontSize="15"
-                                           FontAttributes="Bold" />
-                                            <Label Text="22°C, Cloudy"
-                                           TextColor="#B0B0B0"
-                                           FontSize="13" />
-                                        </VerticalStackLayout>
-                                        
-                                        <Image Grid.Column="2"
-                                               Source="chevron.png"
-                                               Aspect="AspectFit"
-                                               HeightRequest="35"
-                                       VerticalOptions="Center" />
-                                    </Grid>
-                                </Border>
-
-                        <HorizontalStackLayout Grid.Column="1"
-                                           Spacing="10"
-                                           VerticalOptions="Center"
-                                           HorizontalOptions="End">
-                        
-                        
-                            <Border StrokeThickness="0"
-                                    BackgroundColor="#484a40"
-                                    WidthRequest="50"
-                                    HeightRequest="50"
-                                    VerticalOptions="Center">
+    <Grid
+		SafeAreaEdges="None"
+		RowDefinitions="*"
+		HorizontalOptions="Fill"
+		VerticalOptions="Fill">
+        <Image
+			Grid.Row="0"
+			Source="darkbackground.png"
+			Aspect="AspectFill"
+			HorizontalOptions="Fill"
+			VerticalOptions="Fill"
+			ZIndex="0" />
+        <Grid
+			Grid.Row="0"
+			SafeAreaEdges="None"
+			ZIndex="1"
+			RowDefinitions="*">
+            <ScrollView
+				Grid.Row="0">
+                <VerticalStackLayout
+					Spacing="20">
+                    <!-- Header: weather capsule, notification, profile (UraniumUI blur on layouts per Android guidance) -->
+                    <Grid
+						ColumnDefinitions="Auto,*"
+						VerticalOptions="Start"
+						Padding="16">
+                        <Border
+							StrokeThickness="0"
+							Padding="10,10"
+							BackgroundColor="#484a40"
+							VerticalOptions="Center">
+                            <Border.StrokeShape>
+                                <RoundRectangle
+									CornerRadius="999" />
+                            </Border.StrokeShape>
+                            <Grid
+								ColumnDefinitions="Auto,*,Auto"
+								ColumnSpacing="25"
+								VerticalOptions="Center">
+                                <Image
+									Grid.Column="0"
+									Source="cloud.png"
+									WidthRequest="40"
+									HeightRequest="40"
+									Aspect="AspectFit"
+									VerticalOptions="Center" />
+                                <VerticalStackLayout
+									Grid.Column="1"
+									Spacing="2"
+									VerticalOptions="Center">
+                                    <Label
+										Text="Bhopal"
+										TextColor="White"
+										FontSize="15"
+										FontAttributes="Bold" />
+                                    <Label
+										Text="22°C, Cloudy"
+										TextColor="#B0B0B0"
+										FontSize="13" />
+                                </VerticalStackLayout>
+                                <Image
+									Grid.Column="2"
+									Source="chevron.png"
+									Aspect="AspectFit"
+									HeightRequest="35"
+									VerticalOptions="Center" />
+                            </Grid>
+                        </Border>
+                        <HorizontalStackLayout
+							Grid.Column="1"
+							Spacing="4"
+							VerticalOptions="Center"
+							HorizontalOptions="End">
+                            <Border
+								StrokeThickness="0"
+								BackgroundColor="#484a40"
+								WidthRequest="60"
+								HeightRequest="60"
+								VerticalOptions="Center">
                                 <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="24" />
+                                    <RoundRectangle
+										CornerRadius="999" />
                                 </Border.StrokeShape>
-                                <Image Source="bell.png"
-                                       Aspect="AspectFit"
-                                       HeightRequest="30"
-                                       WidthRequest="30"
-                                       VerticalOptions="Center"
-                                       HorizontalOptions="Center" />
+                                <Image
+									Source="bell.png"
+									Aspect="AspectFit"
+									HeightRequest="30"
+									WidthRequest="30"
+									VerticalOptions="Center"
+									HorizontalOptions="Center" />
                             </Border>
-                        
-                            <Border StrokeThickness="0"
-                                    BackgroundColor="#484a40"
-                                    WidthRequest="50"
-                                    HeightRequest="50"
-                                    VerticalOptions="Center">
+                            <Border
+								StrokeThickness="0"
+								BackgroundColor="#484a40"
+								WidthRequest="60"
+								HeightRequest="60"
+								VerticalOptions="Center">
                                 <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="24" />
+                                    <RoundRectangle
+										CornerRadius="999" />
                                 </Border.StrokeShape>
-                                <Image Source="lettuce.png"
-                                       Aspect="AspectFill"
-                                       WidthRequest="50"
-                                       HeightRequest="50" />
+                                <Image
+									Source="lettuce.png"
+									Aspect="AspectFill"
+									WidthRequest="60"
+									HeightRequest="60" />
                             </Border>
-                    </HorizontalStackLayout>
-                </Grid>
-
-                <!-- Hero carousel -->
-                <Grid RowDefinitions="Auto,Auto" RowSpacing="8">
-                    <IndicatorView x:Name="HeroIndicators"
-                                   Grid.Row="1"
-                                   IndicatorColor="#444444"
-                                   SelectedIndicatorColor="#39FF14"
-                                   IndicatorsShape="Circle"
-                                   MaximumVisible="6"
-                                   HorizontalOptions="Center" />
-                    <CarouselView Grid.Row="0"
-                                  x:Name="HeroCarousel"
-                                  ItemsSource="{Binding HeroSlides}"
-                                  HeightRequest="220"
-                                  PeekAreaInsets="0"
-                                  HorizontalOptions="Center"
-                                  IndicatorView="{x:Reference HeroIndicators}">
+                        </HorizontalStackLayout>
+                    </Grid>
+                    <!--<IndicatorView
+							x:Name="HeroIndicators"
+							Grid.Row="1"
+							IndicatorColor="#444444"
+							SelectedIndicatorColor="#39FF14"
+							IndicatorsShape="Circle"
+							MaximumVisible="6"
+							HorizontalOptions="Center" />-->
+                    <!--IndicatorView="{x:Reference HeroIndicators}"-->
+                    <!-- Hero carousel -->
+                    <Grid
+						RowDefinitions="Auto,Auto"
+						RowSpacing="8">
+                        <CarouselView
+							Grid.Row="0"
+							x:Name="HeroCarousel"
+							ItemsSource="{Binding HeroSlides}"
+							HeightRequest="220"
+							PeekAreaInsets="0"
+							HorizontalOptions="Center">
                             <CarouselView.ItemsLayout>
-                                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="0" />
-
+                                <LinearItemsLayout
+									Orientation="Horizontal"
+									ItemSpacing="0" />
                             </CarouselView.ItemsLayout>
-                        <CarouselView.ItemTemplate>
-                            <DataTemplate x:DataType="local:HeroSlideItem"
-                                          xmlns:local="clr-namespace:CropSense.ViewModels">
-                                <Border StrokeThickness="0" Margin="10,0" HorizontalOptions="Center">
-                                    <Border.StrokeShape>
-                                        <RoundRectangle CornerRadius="25" />
-                                    </Border.StrokeShape>
-                                    <Grid>
-                                        <Image Source="{Binding Image}"
-                                               Aspect="AspectFill"
-                                               HeightRequest="220" />
-                                        <Border StrokeThickness="0"
-                                                VerticalOptions="End"
-                                                Padding="6,14">
-                                            <Border.Background>
-                                                <LinearGradientBrush StartPoint="0,1" EndPoint="0,0">
-                                                    <GradientStop Color="#CC000000" Offset="0.0" />
-                                                    <GradientStop Color="Transparent" Offset="1.0" />
-                                                </LinearGradientBrush>
-                                            </Border.Background>
-                                            <VerticalStackLayout Spacing="6">
-                                                <HorizontalStackLayout Spacing="6">
-                                                    <Label Text="{Binding Title}"
-                                                           TextColor="White"
-                                                           FontSize="18"
-                                                           FontAttributes="Bold"
-                                                           LineBreakMode="TailTruncation"
-                                                           HorizontalOptions="Start" />
-                                                    <Label Text="›"
-                                                           TextColor="White"
-                                                           FontSize="18"
-                                                           VerticalOptions="Center" />
-                                                </HorizontalStackLayout>
-                                                <Label Text="{Binding Subtitle}"
-                                                       TextColor="#D0D0D0"
-                                                       FontSize="12"
-                                                       LineBreakMode="TailTruncation" />
-                                            </VerticalStackLayout>
-                                        </Border>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </CarouselView.ItemTemplate>
-                    </CarouselView>
-                </Grid>
-
-                <!-- Quick Access -->
-                <VerticalStackLayout Spacing="20">
-                    <Label Text="Quick Access"
-                           TextColor="White"
-                           FontSize="18"
-                           Padding="15,0"
-                           FontAttributes="Bold" />
-                    <CollectionView ItemsSource="{Binding QuickAccessItems}"
-                                    SelectionMode="None"
-                                    Margin="5,0"
-                                    HeightRequest="66">
-                        <CollectionView.ItemsLayout>
-                            <LinearItemsLayout Orientation="Horizontal" ItemSpacing="0" />
-                        </CollectionView.ItemsLayout>
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="local:QuickAccessItem"
-                                          xmlns:local="clr-namespace:CropSense.ViewModels">
-                                <VerticalStackLayout Spacing="1" WidthRequest="72">
-                                    <Border StrokeThickness="0"
-                                            BackgroundColor="#484a40"
-                                            HeightRequest="55"
-                                            WidthRequest="55"
-                                            HorizontalOptions="Center">
+                            <CarouselView.ItemTemplate>
+                                <DataTemplate
+									x:DataType="local:HeroSlideItem" xmlns:local="clr-namespace:CropSense.ViewModels">
+                                    <Border
+										StrokeThickness="0"
+										Margin="10,0"
+										HorizontalOptions="Center">
                                         <Border.StrokeShape>
-                                            <RoundRectangle CornerRadius="999" />
+                                            <RoundRectangle
+												CornerRadius="25" />
                                         </Border.StrokeShape>
-                                        <Grid WidthRequest="36"
-                                              HeightRequest="36"
-                                              HorizontalOptions="Center"
-                                              VerticalOptions="Center">
-                                            <Image Source="{Binding IconImage}"
-                                                   Aspect="AspectFit"
-                                                   HorizontalOptions="Center"
-                                                   VerticalOptions="Center"
-                                                   IsVisible="{Binding HasImageIcon}" />
-                                            <Label Text="{Binding IconGlyph}"
-                                                   FontSize="22"
-                                                   HorizontalOptions="Center"
-                                                   VerticalOptions="Center"
-                                                   IsVisible="{Binding HasImageIcon, Converter={StaticResource InvertedBoolConverter}}" />
+                                        <Grid>
+                                            <Image
+												Source="{Binding Image}"
+												Aspect="AspectFill"
+												HeightRequest="220" />
+                                            <Border
+												StrokeThickness="0"
+												VerticalOptions="End"
+												Padding="6,14">
+                                                <Border.Background>
+                                                    <LinearGradientBrush
+														StartPoint="0,1"
+														EndPoint="0,0">
+                                                        <GradientStop
+															Color="#CC000000"
+															Offset="0.0" />
+                                                        <GradientStop
+															Color="Transparent"
+															Offset="1.0" />
+                                                    </LinearGradientBrush>
+                                                </Border.Background>
+                                                <VerticalStackLayout
+													Spacing="6">
+                                                    <HorizontalStackLayout
+														Spacing="6">
+                                                        <Label
+															Text="{Binding Title}"
+															TextColor="White"
+															FontSize="18"
+															FontAttributes="Bold"
+															LineBreakMode="TailTruncation"
+															HorizontalOptions="Start" />
+                                                        <Image
+															Grid.Column="2"
+															Source="chevron.png"
+															Aspect="AspectFit"
+															HeightRequest="35"
+															VerticalOptions="Center" />
+                                                    </HorizontalStackLayout>
+                                                    <Label
+														Text="{Binding Subtitle}"
+														TextColor="#D0D0D0"
+														FontSize="12"
+														LineBreakMode="TailTruncation" />
+                                                </VerticalStackLayout>
+                                            </Border>
                                         </Grid>
                                     </Border>
-                                    <!--<Label Text="{Binding Label}"
+                                </DataTemplate>
+                            </CarouselView.ItemTemplate>
+                        </CarouselView>
+                    </Grid>
+                    <!-- Quick Access -->
+                    <VerticalStackLayout
+						Spacing="20">
+                        <Label
+							Text="Quick Access"
+							TextColor="White"
+							FontSize="18"
+							Padding="15,0"
+							FontAttributes="Bold" />
+                        <CollectionView
+							ItemsSource="{Binding QuickAccessItems}"
+							SelectionMode="None"
+							Margin="5,0"
+							HeightRequest="66">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout
+									Orientation="Horizontal"
+									ItemSpacing="0" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate
+									x:DataType="local:QuickAccessItem" xmlns:local="clr-namespace:CropSense.ViewModels">
+                                    <VerticalStackLayout
+										Spacing="1"
+										WidthRequest="72">
+                                        <Border
+											StrokeThickness="0"
+											BackgroundColor="#484a40"
+											HeightRequest="60"
+											WidthRequest="60"
+											HorizontalOptions="Center">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle
+													CornerRadius="999" />
+                                            </Border.StrokeShape>
+                                            <Grid
+												WidthRequest="36"
+												HeightRequest="36"
+												HorizontalOptions="Center"
+												VerticalOptions="Center">
+                                                <Image
+													Source="{Binding IconImage}"
+													Aspect="AspectFit"
+													HorizontalOptions="Center"
+													VerticalOptions="Center"
+													IsVisible="{Binding HasImageIcon}" />
+                                                <Label
+													Text="{Binding IconGlyph}"
+													FontSize="22"
+													HorizontalOptions="Center"
+													VerticalOptions="Center"
+													IsVisible="{Binding HasImageIcon, Converter={StaticResource InvertedBoolConverter}}" />
+                                            </Grid>
+                                        </Border>
+                                        <!--<Label Text="{Binding Label}"
                                            TextColor="#B0B0B0"
                                            FontSize="11"
                                            HorizontalTextAlignment="Center"
                                            LineBreakMode="TailTruncation" />-->
-                                </VerticalStackLayout>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                                    </VerticalStackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                    <!-- Recommended -->
+                    <VerticalStackLayout
+						Spacing="20"
+						Margin="16,0">
+                        <Grid
+							ColumnDefinitions="*,Auto">
+                            <Label
+								Grid.Column="0"
+								TextColor="White"
+								Text="Recommended For You"
+								FontSize="18"
+								FontAttributes="Bold"
+								VerticalOptions="Center" />
+                            <HorizontalStackLayout
+								Grid.Column="1">
+                                <Label
+									Text="View All"
+									TextColor="#39FF14"
+									FontSize="12"
+									VerticalOptions="Center" />
+                                <Image
+									Source="chevron.png"
+									Aspect="AspectFit"
+									HeightRequest="25"
+									VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </Grid>
+                        <CollectionView
+							ItemsSource="{Binding RecommendedItems}"
+							SelectionMode="None"
+							HeightRequest="200">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout
+									Orientation="Horizontal"
+									ItemSpacing="14" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate
+									x:DataType="local:RecommendedItem" xmlns:local="clr-namespace:CropSense.ViewModels">
+                                    <Border
+										WidthRequest="160"
+										StrokeThickness="0"
+										Padding="0">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle
+												CornerRadius="25" />
+                                        </Border.StrokeShape>
+                                        <Grid
+											HeightRequest="200">
+                                            <Image
+												Source="{Binding Image}"
+												Aspect="AspectFill" />
+                                            <Border
+												StrokeThickness="0"
+												VerticalOptions="End"
+												Padding="12,10">
+                                                <Border.Background>
+                                                    <LinearGradientBrush
+														StartPoint="0,1"
+														EndPoint="0,0">
+                                                        <GradientStop
+															Color="#CC000000"
+															Offset="0.0" />
+                                                        <GradientStop
+															Color="Transparent"
+															Offset="0.65" />
+                                                    </LinearGradientBrush>
+                                                </Border.Background>
+                                                <HorizontalStackLayout
+													Spacing="4">
+                                                    <Label
+														Text="{Binding Title}"
+														TextColor="White"
+														FontAttributes="Bold"
+														FontSize="14"
+														LineBreakMode="WordWrap"
+														HorizontalOptions="Fill" />
+                                                    <Label
+														Text="›"
+														TextColor="White"
+														FontSize="14"
+														VerticalOptions="Start" />
+                                                </HorizontalStackLayout>
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
                 </VerticalStackLayout>
-
-                <!-- Recommended -->
-                <VerticalStackLayout Spacing="20" Margin="16,0">
-                    <Grid ColumnDefinitions="*,Auto">
-                        <Label Grid.Column="0"
-                               TextColor="White"
-                               Text="Recommended For You"
-                               FontSize="18"
-                               FontAttributes="Bold"
-                               VerticalOptions="Center" />
-                        <Label Grid.Column="1"
-                               Text="View All ›"
-                               TextColor="#39FF14"
-                               FontSize="12"
-                               VerticalOptions="Center" />
-                    </Grid>
-                    <CollectionView ItemsSource="{Binding RecommendedItems}"
-                                    SelectionMode="None"
-                                    HeightRequest="200">
-                        <CollectionView.ItemsLayout>
-                            <LinearItemsLayout Orientation="Horizontal" ItemSpacing="14" />
-                        </CollectionView.ItemsLayout>
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="local:RecommendedItem"
-                                          xmlns:local="clr-namespace:CropSense.ViewModels">
-                                <Border WidthRequest="160"
-                                        StrokeThickness="0"
-                                        Padding="0">
-                                    <Border.StrokeShape>
-                                        <RoundRectangle CornerRadius="25" />
-                                    </Border.StrokeShape>
-                                    <Grid HeightRequest="200">
-                                        <Image Source="{Binding Image}"
-                                               Aspect="AspectFill" />
-                                        <Border StrokeThickness="0"
-                                                VerticalOptions="End"
-                                                Padding="12,10">
-                                            <Border.Background>
-                                                <LinearGradientBrush StartPoint="0,1" EndPoint="0,0">
-                                                    <GradientStop Color="#CC000000" Offset="0.0" />
-                                                    <GradientStop Color="Transparent" Offset="0.65" />
-                                                </LinearGradientBrush>
-                                            </Border.Background>
-                                            <HorizontalStackLayout Spacing="4">
-                                                <Label Text="{Binding Title}"
-                                                       TextColor="White"
-                                                       FontAttributes="Bold"
-                                                       FontSize="14"
-                                                       LineBreakMode="WordWrap"
-                                                       HorizontalOptions="Fill" />
-                                                <Label Text="›"
-                                                       TextColor="White"
-                                                       FontSize="14"
-                                                       VerticalOptions="Start" />
-                                            </HorizontalStackLayout>
-                                        </Border>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </VerticalStackLayout>
-
-            </VerticalStackLayout>
-        </ScrollView>
+            </ScrollView>
         </Grid>
     </Grid>
 </ContentPage>

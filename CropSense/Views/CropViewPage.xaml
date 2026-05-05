@@ -1,291 +1,360 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:CropSense.ViewModels"
-             x:Class="CropSense.Views.CropViewPage"
-             Shell.NavBarIsVisible="False"
-             Title="Crop View"
-             SafeAreaEdges="None"
-             BackgroundColor="#141400">
-
-    <Grid SafeAreaEdges="None"
-          RowDefinitions="*"
-          HorizontalOptions="Fill"
-          VerticalOptions="Fill">
-
-        <Image Grid.Row="0"
-               Source="darkbackground.png"
-               Aspect="AspectFill"
-               HorizontalOptions="Fill"
-               VerticalOptions="Fill"
-               ZIndex="0" />
-
-        <Grid Grid.Row="0"
-              SafeAreaEdges="None"
-              ZIndex="1"
-              RowDefinitions="*">
-            <ScrollView Grid.Row="0">
-                <VerticalStackLayout Spacing="20">
-
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:CropSense.ViewModels"
+	x:Class="CropSense.Views.CropViewPage"
+	Shell.NavBarIsVisible="False"
+	Title="Crop View"
+	SafeAreaEdges="None"
+	BackgroundColor="#141400">
+    <Grid
+		SafeAreaEdges="None"
+		RowDefinitions="*"
+		HorizontalOptions="Fill"
+		VerticalOptions="Fill">
+        <Image
+			Grid.Row="0"
+			Source="darkbackground.png"
+			Aspect="AspectFill"
+			HorizontalOptions="Fill"
+			VerticalOptions="Fill"
+			ZIndex="0" />
+        <Grid
+			Grid.Row="0"
+			SafeAreaEdges="None"
+			ZIndex="1"
+			RowDefinitions="*">
+            <ScrollView
+				Grid.Row="0">
+                <VerticalStackLayout
+					Spacing="20">
                     <!-- Header: back + titles -->
-                    <Grid ColumnDefinitions="Auto,*"
-                          Padding="16,16,16,0"
-                          ColumnSpacing="12"
-                          VerticalOptions="Start">
-                        <Border Grid.Column="0"
-                                StrokeThickness="0"
-                                BackgroundColor="#484a40"
-                                WidthRequest="44"
-                                HeightRequest="44"
-                                VerticalOptions="Start">
+                    <VerticalStackLayout
+						Grid.Column="1"
+						Spacing="10"
+                        Margin="15,10"
+						VerticalOptions="Center">
+                        <Border
+							Grid.Column="0"
+							StrokeThickness="0"
+							BackgroundColor="#80484a40"
+							WidthRequest="72"
+							HeightRequest="72"
+							HorizontalOptions="Start"
+							VerticalOptions="Center">
                             <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="22" />
+                                <RoundRectangle
+									CornerRadius="999" />
                             </Border.StrokeShape>
-                            <Grid>
-                                <Label Text="‹"
-                                       TextColor="White"
-                                       FontSize="26"
-                                       HorizontalOptions="Center"
-                                       VerticalOptions="Center" />
-                                <Grid.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding GoBackCommand}" />
-                                </Grid.GestureRecognizers>
-                            </Grid>
+                            <Image
+								Source="chevron.png"
+								Aspect="AspectFit"
+								HeightRequest="50"
+								WidthRequest="50"
+								VerticalOptions="Center"
+								HorizontalOptions="Center" />
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer
+									Command="{Binding GoBackCommand}" />
+                            </Border.GestureRecognizers>
                         </Border>
-
-                        <VerticalStackLayout Grid.Column="1"
-                                             Spacing="4"
-                                             VerticalOptions="Center">
-                            <Label Text="Crop View"
-                                   TextColor="White"
-                                   FontSize="20"
-                                   FontAttributes="Bold" />
-                            <Label Text="Choose Your Crop or Field"
-                                   TextColor="#B0B0B0"
-                                   FontSize="13" />
+                        <VerticalStackLayout>
+                            <Label
+				Text="Crop View"
+				TextColor="White"
+				FontSize="35"
+				FontAttributes="Bold" />
+                            <Label
+				Text="Choose Your Crop or Field"
+				TextColor="#B0B0B0"
+				FontSize="20" />
                         </VerticalStackLayout>
-                    </Grid>
-
+                        
+                    </VerticalStackLayout>
                     <!-- Hero card -->
-                    <Border Margin="16,0"
-                            StrokeThickness="0"
-                            Padding="0">
+                    <Border
+						Margin="16,0"
+						StrokeThickness="0"
+						Padding="0">
                         <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="32" />
+                            <RoundRectangle
+								CornerRadius="32" />
                         </Border.StrokeShape>
-                        <Grid HeightRequest="300">
-                            <Image Source="{Binding Featured.Image}"
-                                   Aspect="AspectFill"
-                                   HorizontalOptions="Fill"
-                                   VerticalOptions="Fill" />
-
-                            <Grid RowDefinitions="Auto,*,Auto"
-                                  InputTransparent="False">
-
+                        <Grid
+							HeightRequest="400">
+                            <Image
+								Source="{Binding Featured.Image}"
+								Aspect="AspectFill"
+								HorizontalOptions="Fill"
+								VerticalOptions="Fill" />
+                            <Grid
+								RowDefinitions="Auto,*,Auto"
+								InputTransparent="False">
                                 <!-- Top: badge + expand -->
-                                <Grid Grid.Row="0"
-                                      ColumnDefinitions="Auto,*,Auto"
-                                      Margin="16,16,16,0">
-                                    <Border Grid.Column="0"
-                                            StrokeThickness="0"
-                                            BackgroundColor="#80484a40"
-                                            Padding="10,6"
-                                            VerticalOptions="Start">
+                                <Grid
+									Grid.Row="0"
+									ColumnDefinitions="Auto,*,Auto"
+									Margin="16,16,16,0">
+                                    <Border
+										Grid.Column="0"
+										StrokeThickness="0"
+										BackgroundColor="#80484a40"
+										Padding="10,6"
+										VerticalOptions="Start">
                                         <Border.StrokeShape>
-                                            <RoundRectangle CornerRadius="999" />
+                                            <RoundRectangle
+												CornerRadius="999" />
                                         </Border.StrokeShape>
-                                        <Label Text="{Binding Featured.BadgeGlyph}"
-                                               FontSize="18"
-                                               VerticalOptions="Center" />
+                                        <Image Source="monitorplant.png" HeightRequest="30"/>
+                                        <!--<Label
+											Text="{Binding Featured.BadgeGlyph}"
+											FontSize="18"
+											VerticalOptions="Center" />-->
                                     </Border>
-
-                                    <Border Grid.Column="2"
-                                            StrokeThickness="0"
-                                            BackgroundColor="#80484a40"
-                                            WidthRequest="40"
-                                            HeightRequest="40"
-                                            VerticalOptions="Start">
+                                    <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center"
+				Spacing="6">
+                                        <HorizontalStackLayout
+								Spacing="6">
+                                            <Label
+												Text="{Binding Featured.Title}"
+												TextColor="White"
+												FontSize="18"
+												FontAttributes="Bold"
+												LineBreakMode="TailTruncation"
+												HorizontalOptions="Start" />
+                                            <Label
+												Text="›"
+												TextColor="White"
+												FontSize="18"
+												VerticalOptions="Center">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer
+														Command="{Binding ExpandHeroCommand}" />
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                        </HorizontalStackLayout>
+                                        <Label
+								Text="{Binding Featured.Subtitle}"
+								TextColor="#D0D0D0"
+								FontSize="12"
+								LineBreakMode="TailTruncation" />
+                                    </VerticalStackLayout>
+                                    <Border
+										Grid.Column="2"
+										StrokeThickness="0"
+										BackgroundColor="#80484a40"
+										WidthRequest="40"
+										HeightRequest="40"
+										VerticalOptions="Start">
                                         <Border.StrokeShape>
-                                            <RoundRectangle CornerRadius="20" />
+                                            <RoundRectangle
+												CornerRadius="20" />
                                         </Border.StrokeShape>
+                                        
                                         <Grid>
-                                            <Label Text="⛶"
-                                                   TextColor="White"
-                                                   FontSize="16"
-                                                   HorizontalOptions="Center"
-                                                   VerticalOptions="Center" />
+                                            <Label
+												Text="⛶"
+												TextColor="White"
+												FontSize="16"
+												HorizontalOptions="Center"
+												VerticalOptions="Center" />
                                             <Grid.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding ExpandHeroCommand}" />
+                                                <TapGestureRecognizer
+													Command="{Binding ExpandHeroCommand}" />
                                             </Grid.GestureRecognizers>
                                         </Grid>
                                     </Border>
                                 </Grid>
-
                                 <!-- Bottom: gradient + copy + action row -->
-                                <Border Grid.Row="2"
-                                        StrokeThickness="0"
-                                        Padding="16,14">
+                                <Border
+									Grid.Row="2"
+									StrokeThickness="0"
+									Padding="16,14">
                                     <Border.Background>
-                                        <LinearGradientBrush StartPoint="0,1" EndPoint="0,0">
-                                            <GradientStop Color="#E6000000" Offset="0.0" />
-                                            <GradientStop Color="Transparent" Offset="1.0" />
+                                        <LinearGradientBrush
+											StartPoint="0,1"
+											EndPoint="0,0">
+                                            <GradientStop
+												Color="#E6000000"
+												Offset="0.0" />
+                                            <GradientStop
+												Color="Transparent"
+												Offset="1.0" />
                                         </LinearGradientBrush>
                                     </Border.Background>
-                                    <VerticalStackLayout Spacing="14">
-
-                                        <VerticalStackLayout Spacing="6">
-                                            <HorizontalStackLayout Spacing="6">
-                                                <Label Text="{Binding Featured.Title}"
-                                                       TextColor="White"
-                                                       FontSize="18"
-                                                       FontAttributes="Bold"
-                                                       LineBreakMode="TailTruncation"
-                                                       HorizontalOptions="Start" />
-                                                <Label Text="›"
-                                                       TextColor="White"
-                                                       FontSize="18"
-                                                       VerticalOptions="Center">
-                                                    <Label.GestureRecognizers>
-                                                        <TapGestureRecognizer Command="{Binding ExpandHeroCommand}" />
-                                                    </Label.GestureRecognizers>
-                                                </Label>
-                                            </HorizontalStackLayout>
-                                            <Label Text="{Binding Featured.Subtitle}"
-                                                   TextColor="#D0D0D0"
-                                                   FontSize="12"
-                                                   LineBreakMode="TailTruncation" />
-                                        </VerticalStackLayout>
-
+                                    <VerticalStackLayout
+										Spacing="14">
+                                        
                                         <!-- Glass-style action row -->
-                                        <Border StrokeThickness="0"
-                                                BackgroundColor="#80484a40"
-                                                Padding="10,10">
+                                        <Border
+											StrokeThickness="0"
+											BackgroundColor="Transparent"
+											Padding="10,5">
                                             <Border.StrokeShape>
-                                                <RoundRectangle CornerRadius="999" />
+                                                <RoundRectangle
+													CornerRadius="999" />
                                             </Border.StrokeShape>
-                                            <CollectionView ItemsSource="{Binding HeroActions}"
-                                                            SelectionMode="None"
-                                                            HeightRequest="52">
+                                            <CollectionView
+												ItemsSource="{Binding HeroActions}"
+												SelectionMode="None"
+												HeightRequest="60">
                                                 <CollectionView.ItemsLayout>
-                                                    <LinearItemsLayout Orientation="Horizontal"
-                                                                       ItemSpacing="10" />
+                                                    <LinearItemsLayout
+														Orientation="Horizontal"
+														ItemSpacing="5" />
                                                 </CollectionView.ItemsLayout>
                                                 <CollectionView.ItemTemplate>
-                                                    <DataTemplate x:DataType="local:CropHeroActionItem">
-                                                        <Border StrokeThickness="0"
-                                                                BackgroundColor="#484a40"
-                                                                WidthRequest="44"
-                                                                HeightRequest="44"
-                                                                HorizontalOptions="Center">
+                                                    <DataTemplate
+														x:DataType="local:CropHeroActionItem">
+                                                        <Border
+															StrokeThickness="0"
+                        HeightRequest="60"
+                        WidthRequest="60"
+BackgroundColor="#80484a40">
                                                             <Border.StrokeShape>
-                                                                <RoundRectangle CornerRadius="999" />
+                                                                <RoundRectangle
+																	CornerRadius="999" />
                                                             </Border.StrokeShape>
-                                                            <Grid WidthRequest="44"
-                                                                  HeightRequest="44">
-                                                                <Label Text="{Binding IconGlyph}"
-                                                                       FontSize="18"
-                                                                       HorizontalOptions="Center"
-                                                                       VerticalOptions="Center" />
+                                                            <Grid
+																WidthRequest="44"
+																HeightRequest="44">
+                                                                <Label
+																	Text="{Binding IconGlyph}"
+																	FontSize="18"
+																	HorizontalOptions="Center"
+																	VerticalOptions="Center" />
                                                                 <Grid.GestureRecognizers>
                                                                     <TapGestureRecognizer
-                                                                        Command="{Binding Path=BindingContext.HeroActionCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
-                                                                        CommandParameter="{Binding .}" />
+																		Command="{Binding Path=BindingContext.HeroActionCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+																		CommandParameter="{Binding .}" />
                                                                 </Grid.GestureRecognizers>
                                                             </Grid>
                                                         </Border>
+                                                        
                                                     </DataTemplate>
                                                 </CollectionView.ItemTemplate>
                                             </CollectionView>
+                                            
                                         </Border>
                                     </VerticalStackLayout>
                                 </Border>
                             </Grid>
                         </Grid>
                     </Border>
-
+                    
+                    
                     <!-- Quick links (preserve navigation from earlier placeholder) -->
-                    <HorizontalStackLayout Padding="24,0"
-                                           Spacing="24"
-                                           HorizontalOptions="Center">
-                        <Label Text="Crop camera"
-                               TextColor="#39FF14"
-                               FontSize="14">
+                    <!--<HorizontalStackLayout
+						Padding="24,0"
+						Spacing="24"
+						HorizontalOptions="Center">
+                        <Label
+							Text="Crop camera"
+							TextColor="#39FF14"
+							FontSize="14">
                             <Label.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding OpenCropCameraCommand}" />
+                                <TapGestureRecognizer
+									Command="{Binding OpenCropCameraCommand}" />
                             </Label.GestureRecognizers>
                         </Label>
-                        <Label Text="Crop metrics"
-                               TextColor="#39FF14"
-                               FontSize="14">
+                        <Label
+							Text="Crop metrics"
+							TextColor="#39FF14"
+							FontSize="14">
                             <Label.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding OpenCropMetricsCommand}" />
+                                <TapGestureRecognizer
+									Command="{Binding OpenCropMetricsCommand}" />
                             </Label.GestureRecognizers>
                         </Label>
-                    </HorizontalStackLayout>
+                    </HorizontalStackLayout>-->
+                    
 
                     <!-- Cameras -->
-                    <VerticalStackLayout Spacing="20" Margin="16,0">
-                        <Grid ColumnDefinitions="*,Auto">
-                            <Label Grid.Column="0"
-                                   Text="Cameras"
-                                   TextColor="White"
-                                   FontSize="18"
-                                   FontAttributes="Bold"
-                                   VerticalOptions="Center" />
-                            <HorizontalStackLayout Grid.Column="1"
-                                                   Spacing="2"
-                                                   VerticalOptions="Center">
-                                <Label Text="View All"
-                                       TextColor="#39FF14"
-                                       FontSize="12"
-                                       VerticalOptions="Center" />
-                                <Label Text="›"
-                                       TextColor="#39FF14"
-                                       FontSize="14"
-                                       VerticalOptions="Center" />
+                    <VerticalStackLayout
+						Spacing="20"
+						Margin="16,0">
+                        <Grid
+							ColumnDefinitions="*,Auto">
+                            <Label
+								Grid.Column="0"
+								Text="Cameras"
+								TextColor="White"
+								FontSize="18"
+								FontAttributes="Bold"
+								VerticalOptions="Center" />
+                            <HorizontalStackLayout
+								Grid.Column="1"
+								Spacing="2"
+								VerticalOptions="Center">
+                                <Label
+									Text="View All"
+									TextColor="#39FF14"
+									FontSize="12"
+									VerticalOptions="Center" />
+                                <Label
+									Text="›"
+									TextColor="#39FF14"
+									FontSize="14"
+									VerticalOptions="Center" />
                                 <HorizontalStackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding ViewAllCamerasCommand}" />
+                                    <TapGestureRecognizer
+										Command="{Binding ViewAllCamerasCommand}" />
                                 </HorizontalStackLayout.GestureRecognizers>
                             </HorizontalStackLayout>
                         </Grid>
-
-                        <CollectionView ItemsSource="{Binding CameraCards}"
-                                        SelectionMode="None"
-                                        HeightRequest="200">
+                        <CollectionView
+							ItemsSource="{Binding CameraCards}"
+							SelectionMode="None"
+							HeightRequest="200">
                             <CollectionView.ItemsLayout>
-                                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="14" />
+                                <LinearItemsLayout
+									Orientation="Horizontal"
+									ItemSpacing="14" />
                             </CollectionView.ItemsLayout>
                             <CollectionView.ItemTemplate>
-                                <DataTemplate x:DataType="local:CameraCardItem">
-                                    <Border WidthRequest="160"
-                                            StrokeThickness="0"
-                                            Padding="0">
+                                <DataTemplate
+									x:DataType="local:CameraCardItem">
+                                    <Border
+										WidthRequest="180"
+										StrokeThickness="0"
+										Padding="0">
                                         <Border.StrokeShape>
-                                            <RoundRectangle CornerRadius="25" />
+                                            <RoundRectangle
+												CornerRadius="25" />
                                         </Border.StrokeShape>
-                                        <Grid HeightRequest="200">
-                                            <Image Source="{Binding Image}"
-                                                   Aspect="AspectFill" />
-                                            <Border StrokeThickness="0"
-                                                    VerticalOptions="End"
-                                                    Padding="12,10">
+                                        <Grid
+											HeightRequest="200">
+                                            <Image
+												Source="{Binding Image}"
+												Aspect="AspectFill" />
+                                            <Border
+												StrokeThickness="0"
+												VerticalOptions="End"
+												Padding="12,10">
                                                 <Border.Background>
-                                                    <LinearGradientBrush StartPoint="0,1" EndPoint="0,0">
-                                                        <GradientStop Color="#CC000000" Offset="0.0" />
-                                                        <GradientStop Color="Transparent" Offset="0.65" />
+                                                    <LinearGradientBrush
+														StartPoint="0,1"
+														EndPoint="0,0">
+                                                        <GradientStop
+															Color="#CC000000"
+															Offset="0.0" />
+                                                        <GradientStop
+															Color="Transparent"
+															Offset="0.65" />
                                                     </LinearGradientBrush>
                                                 </Border.Background>
-                                                <HorizontalStackLayout Spacing="4">
-                                                    <Label Text="{Binding Title}"
-                                                           TextColor="White"
-                                                           FontAttributes="Bold"
-                                                           FontSize="14"
-                                                           LineBreakMode="WordWrap"
-                                                           HorizontalOptions="Fill" />
-                                                    <Label Text="›"
-                                                           TextColor="White"
-                                                           FontSize="14"
-                                                           VerticalOptions="Start" />
+                                                <HorizontalStackLayout
+													Spacing="4">
+                                                    <Label
+														Text="{Binding Title}"
+														TextColor="White"
+														FontAttributes="Bold"
+														FontSize="14"
+														LineBreakMode="WordWrap"
+														HorizontalOptions="Fill" />
+                                                    <Label
+														Text="›"
+														TextColor="White"
+														FontSize="14"
+														VerticalOptions="Start" />
                                                 </HorizontalStackLayout>
                                             </Border>
                                         </Grid>
@@ -294,7 +363,6 @@
                             </CollectionView.ItemTemplate>
                         </CollectionView>
                     </VerticalStackLayout>
-
                 </VerticalStackLayout>
             </ScrollView>
         </Grid>

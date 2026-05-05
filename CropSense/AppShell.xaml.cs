@@ -30,8 +30,8 @@ public partial class AppShell : Shell
 			tab.Icon = ImageSource.FromFile(selectedRoute == route ? filledFile : outlineFile);
 		}
 
-		Apply(HomeTab, "monitorplant.png", "monitorplant.png", "home");
-		Apply(CropsTab, "bell.png", "bell.png", "crop-view");
+		Apply(HomeTab, "home.png", "home.png", "home");
+		Apply(CropsTab, "monitorplant.png", "monitorplant.png", "crop-view");
 		Apply(ScanTab, "camera.png", "camera.png", "capture");
 		Apply(ProfileTab, "user.png", "user.png", "settings");
 	}

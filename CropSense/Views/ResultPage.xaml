@@ -18,7 +18,7 @@
                Aspect="AspectFill"
                HorizontalOptions="Fill"
                VerticalOptions="Fill"
-               ZIndex="0" />
+               ZIndex="0"/>
 
         <Grid Grid.Row="0"
               SafeAreaEdges="None"
@@ -41,16 +41,16 @@
                                 HeightRequest="60"
                                 VerticalOptions="Start">
                             <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="999" />
+                                <RoundRectangle CornerRadius="999"/>
                             </Border.StrokeShape>
                             <Grid>
                                 <Label Text="‹"
                                        TextColor="White"
                                        FontSize="26"
                                        HorizontalOptions="Center"
-                                       VerticalOptions="Center" />
+                                       VerticalOptions="Center"/>
                                 <Grid.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding GoBackCommand}" />
+                                    <TapGestureRecognizer Command="{Binding GoBackCommand}"/>
                                 </Grid.GestureRecognizers>
                             </Grid>
                         </Border>
@@ -64,15 +64,15 @@
                                     WidthRequest="44"
                                     HeightRequest="44">
                                 <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="22" />
+                                    <RoundRectangle CornerRadius="22"/>
                                 </Border.StrokeShape>
                                 <Grid>
                                     <Label Text="🔖"
                                            FontSize="18"
                                            HorizontalOptions="Center"
-                                           VerticalOptions="Center" />
+                                           VerticalOptions="Center"/>
                                     <Grid.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding ToggleBookmarkCommand}" />
+                                        <TapGestureRecognizer Command="{Binding ToggleBookmarkCommand}"/>
                                     </Grid.GestureRecognizers>
                                 </Grid>
                             </Border>
@@ -81,15 +81,15 @@
                                     WidthRequest="44"
                                     HeightRequest="44">
                                 <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="22" />
+                                    <RoundRectangle CornerRadius="22"/>
                                 </Border.StrokeShape>
                                 <Grid>
                                     <Label Text="📤"
                                            FontSize="18"
                                            HorizontalOptions="Center"
-                                           VerticalOptions="Center" />
+                                           VerticalOptions="Center"/>
                                     <Grid.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding ShareCommand}" />
+                                        <TapGestureRecognizer Command="{Binding ShareCommand}"/>
                                     </Grid.GestureRecognizers>
                                 </Grid>
                             </Border>
@@ -97,27 +97,28 @@
                     </Grid>
 
                     <!-- Title block -->
-                    <VerticalStackLayout Spacing="8" Padding="24,0">
+                    <VerticalStackLayout Spacing="8"
+                            Padding="24,0">
                         <Label Text="{Binding PredictionLabel}"
                                TextColor="White"
                                FontSize="28"
                                FontAttributes="Bold"
-                               LineBreakMode="WordWrap" />
+                               LineBreakMode="WordWrap"/>
                         <Label Text="{Binding DiseaseSubtitle}"
                                TextColor="White"
                                FontSize="16"
-                               LineBreakMode="WordWrap" />
+                               LineBreakMode="WordWrap"/>
                         <HorizontalStackLayout Spacing="16">
                             <Label Text="{Binding Confidence}"
                                    TextColor="#B0B0B0"
-                                   FontSize="13" />
+                                   FontSize="13"/>
                             <Label Text="{Binding Severity}"
                                    TextColor="#B0B0B0"
-                                   FontSize="13" />
+                                   FontSize="13"/>
                         </HorizontalStackLayout>
                     </VerticalStackLayout>
 
-                        <!--<IndicatorView x:Name="ResultIndicators"
+                    <!--<IndicatorView x:Name="ResultIndicators"
                                        Grid.Row="1"
                                        IndicatorColor="#444444"
                                        SelectedIndicatorColor="#39FF14"
@@ -140,7 +141,7 @@
                                       HorizontalOptions="Fill">
                             <CarouselView.ItemsLayout>
                                 <LinearItemsLayout Orientation="Horizontal"
-                                                   ItemSpacing="5" />
+                                                   ItemSpacing="5"/>
                             </CarouselView.ItemsLayout>
                             <CarouselView.ItemTemplate>
                                 <DataTemplate x:DataType="local:ResultHeroSlideItem">
@@ -148,12 +149,12 @@
                                             Margin="1,0"
                                             HorizontalOptions="Center">
                                         <Border.StrokeShape>
-                                            <RoundRectangle CornerRadius="40" />
+                                            <RoundRectangle CornerRadius="40"/>
                                         </Border.StrokeShape>
                                         <Image Source="{Binding Photo}"
                                                Aspect="AspectFill"
                                                HeightRequest="600"
-                                               HorizontalOptions="Fill" />
+                                               HorizontalOptions="Fill"/>
                                     </Border>
                                 </DataTemplate>
                             </CarouselView.ItemTemplate>
@@ -161,23 +162,25 @@
                     </Grid>
 
                     <!-- Description -->
-                    <VerticalStackLayout Spacing="12" Padding="24,0">
+                    <VerticalStackLayout Spacing="12"
+                            Padding="24,0">
                         <Label Text="Description"
                                TextColor="White"
                                FontSize="18"
-                               FontAttributes="Bold" />
+                               FontAttributes="Bold"/>
                         <Label Text="{Binding DescriptionBody}"
                                TextColor="White"
                                FontSize="15"
-                               LineBreakMode="WordWrap" />
+                               LineBreakMode="WordWrap"/>
                     </VerticalStackLayout>
 
                     <!-- Key facts -->
-                    <VerticalStackLayout Spacing="14" Padding="25">
+                    <VerticalStackLayout Spacing="14"
+                            Padding="25">
                         <Label Text="Key Facts"
                                TextColor="White"
                                FontSize="18"
-                               FontAttributes="Bold" />
+                               FontAttributes="Bold"/>
                         <VerticalStackLayout BindableLayout.ItemsSource="{Binding KeyFacts}"
                                              Spacing="12">
                             <BindableLayout.ItemTemplate>
@@ -186,15 +189,15 @@
                                         <Label Text="{Binding Key}"
                                                TextColor="White"
                                                FontAttributes="Bold"
-                                               FontSize="15" />
+                                               FontSize="15"/>
                                         <Label Text="–"
                                                TextColor="White"
-                                               FontSize="15" />
+                                               FontSize="15"/>
                                         <Label Text="{Binding Value}"
                                                TextColor="White"
                                                FontSize="15"
                                                LineBreakMode="WordWrap"
-                                               HorizontalOptions="Fill" />
+                                               HorizontalOptions="Fill"/>
                                     </HorizontalStackLayout>
                                 </DataTemplate>
                             </BindableLayout.ItemTemplate>
@@ -202,20 +205,21 @@
                     </VerticalStackLayout>
 
                     <!-- Treatment / prevention -->
-                    <HorizontalStackLayout Spacing="24" Padding="24,0"
+                    <HorizontalStackLayout Spacing="24"
+                            Padding="24,0"
                                            HorizontalOptions="Center">
                         <Label Text="Treatment"
                                TextColor="#39FF14"
                                FontSize="15">
                             <Label.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnTreatmentTapped" />
+                                <TapGestureRecognizer Tapped="OnTreatmentTapped"/>
                             </Label.GestureRecognizers>
                         </Label>
                         <Label Text="Prevention"
                                TextColor="#39FF14"
                                FontSize="15">
                             <Label.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnPreventionTapped" />
+                                <TapGestureRecognizer Tapped="OnPreventionTapped"/>
                             </Label.GestureRecognizers>
                         </Label>
                     </HorizontalStackLayout>
@@ -234,7 +238,7 @@
                     Margin="24"
                     ZIndex="2">
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="28" />
+                    <RoundRectangle CornerRadius="28"/>
                 </Border.StrokeShape>
                 <Grid>
                     <Label Text="^"
@@ -242,9 +246,9 @@
                            FontSize="22"
                            FontAttributes="Bold"
                            HorizontalOptions="Center"
-                           VerticalOptions="Center" />
+                           VerticalOptions="Center"/>
                     <Grid.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnScrollTopTapped" />
+                        <TapGestureRecognizer Tapped="OnScrollTopTapped"/>
                     </Grid.GestureRecognizers>
                 </Grid>
             </Border>

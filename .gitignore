@@ -434,3 +434,8 @@ CropSense/.DS_Store
 .DS_Store
 CropSense/Resources/.DS_Store
 CropSense/Resources/.DS_Store
+
+
+
+CropSense Python Implementation/.venv
+CropSense Python Implementation/.venv/*

@@ -1,1 +1,4 @@
+CropSense[[:space:]]Python[[:space:]]Implementation/*.h5 filter=lfs diff=lfs merge=lfs -text
+CropSense[[:space:]]Python[[:space:]]Implementation/Training[[:space:]]saved[[:space:]]model/*.h5 filter=lfs diff=lfs merge=lfs -text
+CropSense[[:space:]]Python[[:space:]]Implementation/resnet50_saved_model/variables/variables.data-00000-of-00001 filter=lfs diff=lfs merge=lfs -text
 CropSense[[:space:]]Python[[:space:]]Implementation/models/resnet50_saved_model/variables/variables.data-00000-of-00001 filter=lfs diff=lfs merge=lfs -text

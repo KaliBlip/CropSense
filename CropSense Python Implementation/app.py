@@ -26,9 +26,10 @@ st.set_page_config(
 # Configuration
 # ─────────────────────────────────────────────────────────────────────────────
 IMG_SIZE = (224, 224)
-OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "CropSense_Output")
+APP_DIR = os.path.dirname(os.path.abspath(__file__))
+OUTPUT_DIR = os.path.join(APP_DIR, "CropSense_Output")
 SAVED_MODEL_PATH = os.path.join(OUTPUT_DIR, "resnet50_saved_model")
-TRAIN_DIR = os.path.join(OUTPUT_DIR, "CCMT_unified", "train")
+TRAIN_DIR = os.path.join(APP_DIR, "CCMT_unified", "train")
 
 # Fallback class names used by the model
 HARDCODED_CLASSES = [
@@ -64,17 +65,32 @@ def load_model():
         st.error(f"❌ Model not found at: {saved_model_path}")
         st.stop()
     
-    # Load model (includes architecture and weights)
-    model = tf.keras.models.load_model(saved_model_path)
-    
-    # Convert to concrete function for proper inference
-    concrete_func = model.signatures['serving_default']
+    try:
+        # Try loading a Keras-compatible saved model first
+        model = tf.keras.models.load_model(saved_model_path)
+        concrete_func = model.signatures['serving_default']
+    except ValueError as exc:
+        # Keras 3 no longer supports legacy SavedModel format directly.
+        # Fall back to loading the SavedModel as a TF SavedModel and use its serving_default signature.
+        error_text = str(exc)
+        if "legacy SavedModel format" not in error_text and "File format not supported" not in error_text:
+            raise
+        model = tf.saved_model.load(saved_model_path)
+        try:
+            concrete_func = model.signatures['serving_default']
+        except Exception as err:
+            st.error(f"❌ SavedModel loaded, but could not find 'serving_default' signature: {err}")
+            st.stop()
     
     # Get number of classes
+    has_classes = False
     if os.path.exists(TRAIN_DIR):
         all_subdirs = [d for d in pathlib.Path(TRAIN_DIR).iterdir() if d.is_dir()]
-        num_classes = len(all_subdirs)
-    else:
+        if len(all_subdirs) == len(HARDCODED_CLASSES):
+            has_classes = True
+            num_classes = len(all_subdirs)
+            
+    if not has_classes:
         num_classes = len(HARDCODED_CLASSES)
     
     # Preprocess function
@@ -84,11 +100,15 @@ def load_model():
 
 @st.cache_resource
 def get_class_names():
-    """Get class names - from training directory if available, otherwise from fallback list."""
+    """Get class names - from training directory if available and valid, otherwise from fallback list."""
+    has_classes = False
     if os.path.exists(TRAIN_DIR):
         all_subdirs = [d for d in pathlib.Path(TRAIN_DIR).iterdir() if d.is_dir()]
-        class_names = sorted([d.name for d in all_subdirs])
-    else:
+        if len(all_subdirs) == len(HARDCODED_CLASSES):
+            has_classes = True
+            class_names = sorted([d.name for d in all_subdirs])
+            
+    if not has_classes:
         class_names = HARDCODED_CLASSES
     return class_names
 
@@ -152,7 +172,7 @@ display_image = None
 
 if use_sample:
     # Load random image from test set
-    test_dir = os.path.join(OUTPUT_DIR, "CCMT_unified", "test")
+    test_dir = os.path.join(APP_DIR, "CCMT_unified", "test")
     if os.path.exists(test_dir):
         all_images = list(pathlib.Path(test_dir).rglob("*.jpg")) + \
                      list(pathlib.Path(test_dir).rglob("*.png")) + \

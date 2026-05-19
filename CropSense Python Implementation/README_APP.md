@@ -1,5 +1,10 @@
 # 🌿 Crop Pest & Disease Detection Streamlit App
 
+source .venv/bin/activate
+
+streamlit run app.py
+
+
 A web-based application for detecting crop pests and diseases using a trained ResNet50 deep learning model.
 
 ## Features

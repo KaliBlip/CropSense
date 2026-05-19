@@ -26,9 +26,31 @@ st.set_page_config(
 # Configuration
 # ─────────────────────────────────────────────────────────────────────────────
 IMG_SIZE = (224, 224)
-OUTPUT_DIR = os.path.expanduser("~/CropSense_Output")
+OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "CropSense_Output")
 SAVED_MODEL_PATH = os.path.join(OUTPUT_DIR, "resnet50_saved_model")
 TRAIN_DIR = os.path.join(OUTPUT_DIR, "CCMT_unified", "train")
+
+# Fallback class names used by the model
+HARDCODED_CLASSES = [
+    "anthracnose",
+    "bacterial blight",
+    "brown spot",
+    "fall armyworm",
+    "grasshoper",
+    "green mite",
+    "gumosis",
+    "healthy",
+    "leaf beetle",
+    "leaf blight",
+    "leaf curl",
+    "leaf miner",
+    "leaf spot",
+    "mosaic",
+    "red rust",
+    "septoria leaf spot",
+    "streak virus",
+    "verticulium wilt"
+]
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Load Model (cached to avoid reloading)
@@ -48,9 +70,12 @@ def load_model():
     # Convert to concrete function for proper inference
     concrete_func = model.signatures['serving_default']
     
-    # Get number of classes from training directory (ALL directories, not just non-empty)
-    all_subdirs = [d for d in pathlib.Path(TRAIN_DIR).iterdir() if d.is_dir()]
-    num_classes = len(all_subdirs)
+    # Get number of classes
+    if os.path.exists(TRAIN_DIR):
+        all_subdirs = [d for d in pathlib.Path(TRAIN_DIR).iterdir() if d.is_dir()]
+        num_classes = len(all_subdirs)
+    else:
+        num_classes = len(HARDCODED_CLASSES)
     
     # Preprocess function
     preprocess_input = tf.keras.applications.resnet50.preprocess_input
@@ -59,10 +84,12 @@ def load_model():
 
 @st.cache_resource
 def get_class_names():
-    """Get class names from training directory - ALL directories, not just non-empty ones."""
-    all_subdirs = [d for d in pathlib.Path(TRAIN_DIR).iterdir() if d.is_dir()]
-    # Include all directories to match model's training classes
-    class_names = sorted([d.name for d in all_subdirs])
+    """Get class names - from training directory if available, otherwise from fallback list."""
+    if os.path.exists(TRAIN_DIR):
+        all_subdirs = [d for d in pathlib.Path(TRAIN_DIR).iterdir() if d.is_dir()]
+        class_names = sorted([d.name for d in all_subdirs])
+    else:
+        class_names = HARDCODED_CLASSES
     return class_names
 
 # ─────────────────────────────────────────────────────────────────────────────

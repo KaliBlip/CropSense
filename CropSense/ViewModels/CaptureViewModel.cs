@@ -43,7 +43,7 @@ public sealed partial class CaptureViewModel : BaseViewModel
 			LastResult = await _runDiagnosisUseCase.ExecuteAsync(fullPath);
 			_diagnosisSession.LastResult = LastResult;
 			_diagnosisSession.LastAnalyzedImagePath = fullPath;
-			await Shell.Current.GoToAsync("//result");
+			await Shell.Current.GoToAsync("result");
 		}
 		finally
 		{

@@ -1,0 +1,57 @@
+⏳ Training classification head for up to 10 epochs ...
+
+Epoch 1/10
+[1m5906/5906[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 727ms/step - accuracy: 0.5592 - loss: 1.3658
+Epoch 1: val_accuracy improved from None to 0.65151, saving model to C:\Users\TecFielD/CropSense_Output\resnet50_head.weights.h5
+🧹 Memory cleaned after epoch 1
+[1m5906/5906[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m5045s[0m 850ms/step - accuracy: 0.6103 - loss: 1.1868 - val_accuracy: 0.6515 - val_loss: 1.1758 - learning_rate: 0.0010
+Epoch 2/10
+[1m5906/5906[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 654ms/step - accuracy: 0.6448 - loss: 1.0964
+Epoch 2: val_accuracy improved from 0.65151 to 0.68477, saving model to C:\Users\TecFielD/CropSense_Output\resnet50_head.weights.h5
+🧹 Memory cleaned after epoch 2
+[1m5906/5906[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m4594s[0m 775ms/step - accuracy: 0.6450 - loss: 1.0997 - val_accuracy: 0.6848 - val_loss: 1.0529 - learning_rate: 0.0010
+Epoch 3/10
+[1m5906/5906[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 648ms/step - accuracy: 0.6484 - loss: 1.0943
+Epoch 3: val_accuracy did not improve from 0.68477
+🧹 Memory cleaned after epoch 3
+[1m5906/5906[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m4579s[0m 772ms/step - accuracy: 0.6480 - loss: 1.1009 - val_accuracy: 0.6830 - val_loss: 0.9915 - learning_rate: 0.0010
+Epoch 4/10
+[1m5906/5906[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 659ms/step - accuracy: 0.6524 - loss: 1.1018
+Epoch 4: val_accuracy improved from 0.68477 to 0.68904, saving model to C:\Users\TecFielD/CropSense_Output\resnet50_head.weights.h5
+🧹 Memory cleaned after epoch 4
+[1m5906/5906[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m4641s[0m 783ms/step - accuracy: 0.6505 - loss: 1.1059 - val_accuracy: 0.6890 - val_loss: 1.0761 - learning_rate: 0.0010
+Epoch 5/10
+[1m5906/5906[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 649ms/step - accuracy: 0.6520 - loss: 1.1045
+Epoch 5: val_accuracy improved from 0.68904 to 0.70001, saving model to C:\Users\TecFielD/CropSense_Output\resnet50_head.weights.h5
+🧹 Memory cleaned after epoch 5
+[1m5906/5906[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m4560s[0m 769ms/step - accuracy: 0.6516 - loss: 1.1050 - val_accuracy: 0.7000 - val_loss: 0.9894 - learning_rate: 0.0010
+Epoch 6/10
+[1m5906/5906[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 654ms/step - accuracy: 0.6500 - loss: 1.1002
+Epoch 6: val_accuracy did not improve from 0.70001
+🧹 Memory cleaned after epoch 6
+[1m5906/5906[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m4614s[0m 778ms/step - accuracy: 0.6517 - loss: 1.1035 - val_accuracy: 0.6898 - val_loss: 1.1002 - learning_rate: 0.0010
+Epoch 7/10
+[1m5906/5906[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 680ms/step - accuracy: 0.6528 - loss: 1.1069
+Epoch 7: val_accuracy did not improve from 0.70001
+
+Epoch 7: ReduceLROnPlateau reducing learning rate to 0.0005000000237487257.
+🧹 Memory cleaned after epoch 7
+[1m5906/5906[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m4760s[0m 803ms/step - accuracy: 0.6523 - loss: 1.1041 - val_accuracy: 0.6872 - val_loss: 1.1031 - learning_rate: 0.0010
+Epoch 8/10
+[1m5906/5906[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 663ms/step - accuracy: 0.6702 - loss: 1.0095
+Epoch 8: val_accuracy improved from 0.70001 to 0.70163, saving model to C:\Users\TecFielD/CropSense_Output\resnet50_head.weights.h5
+🧹 Memory cleaned after epoch 8
+[1m5906/5906[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m4653s[0m 785ms/step - accuracy: 0.6726 - loss: 0.9922 - val_accuracy: 0.7016 - val_loss: 0.9786 - learning_rate: 5.0000e-04
+Epoch 9/10
+[1m5906/5906[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 666ms/step - accuracy: 0.6749 - loss: 0.9700
+Epoch 9: val_accuracy improved from 0.70163 to 0.70562, saving model to C:\Users\TecFielD/CropSense_Output\resnet50_head.weights.h5
+🧹 Memory cleaned after epoch 9
+[1m5906/5906[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m4672s[0m 788ms/step - accuracy: 0.6750 - loss: 0.9680 - val_accuracy: 0.7056 - val_loss: 0.9938 - learning_rate: 5.0000e-04
+Epoch 10/10
+[1m5906/5906[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 650ms/step - accuracy: 0.6757 - loss: 0.9606
+Epoch 10: val_accuracy did not improve from 0.70562
+
+Epoch 10: ReduceLROnPlateau reducing learning rate to 0.0002500000118743628.
+🧹 Memory cleaned after epoch 10
+[1m5906/5906[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m4596s[0m 775ms/step - accuracy: 0.6752 - loss: 0.9604 - val_accuracy: 0.7027 - val_loss: 0.9836 - learning_rate: 5.0000e-04
+Restoring model weights from the end of the best epoch: 8.

@@ -38,8 +38,10 @@ HARDCODED_CLASSES = [
     "brown spot",
     "fall armyworm",
     "grasshoper",
+    "grasshopper",
     "green mite",
     "gumosis",
+    "gummosis",
     "healthy",
     "leaf beetle",
     "leaf blight",
@@ -50,6 +52,7 @@ HARDCODED_CLASSES = [
     "red rust",
     "septoria leaf spot",
     "streak virus",
+    "verticillium wilt",
     "verticulium wilt"
 ]
 

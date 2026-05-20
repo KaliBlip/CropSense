@@ -223,3 +223,4 @@ For issues or questions:
 ---
 
 **Made with ❤️ for crop health monitoring**
+

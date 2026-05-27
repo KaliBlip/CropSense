@@ -15,12 +15,27 @@ import {
   Upload,
   Info,
   AlertTriangle,
+  Droplets,
+  Wind,
+  SunMedium,
+  Flame,
+  CheckCircle,
+  Scissors,
+  Beaker,
+  HelpCircle,
+  Activity,
+  Leaf,
+  Bug,
+  Biohazard,
+  AlertOctagon,
+  BookOpen
 } from "lucide-react";
 import {
   careCards,
   fieldMetrics,
   quickActions,
 } from "@/lib/cropsense-data";
+import { diseaseDatabase } from "@/lib/disease-db";
 import { predictImage, predictFromUrl, getSamples } from "@/lib/api";
 import { ClassPrediction, PredictionResult } from "@/lib/types";
 
@@ -601,91 +616,367 @@ function CareView({
   crop: string;
   severity: "Healthy" | "Watch" | "Treat";
 }) {
+  const [selectedKey, setSelectedKey] = useState<string>(
+    topPrediction ? topPrediction.class_name.toLowerCase() : "healthy"
+  );
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeTreatmentTab, setActiveTreatmentTab] = useState<"organic" | "chemical" | "cultural">("organic");
+
+  // Keep selected disease in sync when a new prediction arrives
+  useEffect(() => {
+    if (topPrediction) {
+      setSelectedKey(topPrediction.class_name.toLowerCase());
+    }
+  }, [topPrediction]);
+
+  // Normalize key to handle spacing/typos
+  const getNormalizedKey = (key: string) => {
+    let k = key.toLowerCase().trim();
+    if (k === "grasshoper") return "grasshopper";
+    if (k === "gumosis") return "gummosis";
+    if (k === "verticulium wilt") return "verticillium wilt";
+    return k;
+  };
+
+  const currentDiseaseKey = getNormalizedKey(selectedKey);
+  const disease = diseaseDatabase[currentDiseaseKey] || diseaseDatabase["healthy"];
+
+  // Search filter list of all diseases from database
+  const allDiseases = Object.keys(diseaseDatabase).filter(
+    (key, index, self) => self.indexOf(getNormalizedKey(key)) === index // deduplicate aliases
+  );
+
+  const filteredDiseases = allDiseases.filter((key) => {
+    const d = diseaseDatabase[key];
+    const matchesSearch =
+      d.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      d.crop.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      d.category.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesSearch;
+  });
+
+  const isActiveDiagnosis = topPrediction && topPrediction.class_name.toLowerCase() === selectedKey;
+
+  // Render icons dynamically
+  function getPreventionIcon(iconName: string) {
+    switch (iconName) {
+      case "Droplets": return <Droplets size={18} className="text-sky-400" />;
+      case "Scissors": return <Scissors size={18} className="text-amber-400" />;
+      case "ShieldCheck": return <ShieldCheck size={18} className="text-green-400" />;
+      case "Wind": return <Wind size={18} className="text-indigo-400" />;
+      case "SunMedium": return <SunMedium size={18} className="text-amber-300" />;
+      case "Flame": return <Flame size={18} className="text-red-400" />;
+      case "Activity": return <Activity size={18} className="text-emerald-400" />;
+      default: return <Sprout size={18} className="text-green-400" />;
+    }
+  }
+
+  // Cover image mapper for diseases
+  const getCoverImage = (key: string) => {
+    switch (key) {
+      case "anthracnose":
+        return "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?auto=format&fit=crop&w=600&q=80";
+      case "bacterial blight":
+        return "https://images.unsplash.com/photo-1592150621744-aca64f48394a?auto=format&fit=crop&w=600&q=80";
+      case "brown spot":
+        return "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=600&q=80";
+      case "fall armyworm":
+        return "https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?auto=format&fit=crop&w=600&q=80";
+      case "grasshopper":
+      case "grasshoper":
+        return "https://images.unsplash.com/photo-1576016770956-debb63d900ee?auto=format&fit=crop&w=600&q=80";
+      case "green mite":
+        return "https://images.unsplash.com/photo-1579613832125-5d34a13ff2a8?auto=format&fit=crop&w=600&q=80";
+      case "gummosis":
+      case "gumosis":
+        return "https://images.unsplash.com/photo-1523301343968-6a6ebf63c672?auto=format&fit=crop&w=600&q=80";
+      case "leaf beetle":
+        return "https://images.unsplash.com/photo-1470246973918-29a93221c455?auto=format&fit=crop&w=600&q=80";
+      case "leaf blight":
+        return "https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&fit=crop&w=600&q=80";
+      case "leaf curl":
+        return "https://images.unsplash.com/photo-1582281227099-7f4577f6b863?auto=format&fit=crop&w=600&q=80";
+      case "leaf miner":
+        return "https://images.unsplash.com/photo-1560493676-04071c5f467b?auto=format&fit=crop&w=600&q=80";
+      case "leaf spot":
+        return "https://images.unsplash.com/photo-1587334206501-72ffecfb4b3e?auto=format&fit=crop&w=600&q=80";
+      case "mosaic":
+        return "https://images.unsplash.com/photo-1463123081488-72993af4d3d9?auto=format&fit=crop&w=600&q=80";
+      case "red rust":
+        return "https://images.unsplash.com/photo-1508595165512-7dec041aa26b?auto=format&fit=crop&w=600&q=80";
+      case "septoria leaf spot":
+        return "https://images.unsplash.com/photo-1597362925123-77861d3fbac7?auto=format&fit=crop&w=600&q=80";
+      case "streak virus":
+        return "https://images.unsplash.com/photo-1532983330958-2f3557d767be?auto=format&fit=crop&w=600&q=80";
+      case "verticillium wilt":
+      case "verticulium wilt":
+        return "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=600&q=80";
+      default:
+        return "https://images.unsplash.com/photo-1592417817098-8f3d6eb19675?auto=format&fit=crop&w=600&q=80";
+    }
+  };
+
+  const currentRecipe = disease.treatment[activeTreatmentTab];
+
   return (
     <div className="view care-view space-y-4">
-      {topPrediction ? (
-        <>
-          <header className="care-header">
-            <button className="circle-button" aria-label="Search care library">
-              <Search size={19} />
+      {/* Header bar */}
+      <header className="care-header flex items-center justify-between pb-1">
+        <div>
+          <span className="eyebrow block">Agronomy Hub</span>
+          <h1 className="text-xl font-bold font-outfit text-slate-100">Care & Treatment</h1>
+        </div>
+        <div className="flex gap-2">
+          {topPrediction && !isActiveDiagnosis && (
+            <button
+              onClick={() => setSelectedKey(topPrediction.class_name.toLowerCase())}
+              className="circle-button text-green-400 border border-green-500/20"
+              style={{ width: "36px", height: "36px" }}
+              title="Show active scan result"
+            >
+              <RotateCcw size={16} />
             </button>
-            <button className="circle-button" aria-label="Share plan">
-              <Share2 size={20} />
-            </button>
-          </header>
+          )}
+          <button className="circle-button" aria-label="Share plan" style={{ width: "36px", height: "36px" }}>
+            <Share2 size={16} />
+          </button>
+        </div>
+      </header>
 
-          <section className="disease-hero">
-            <div className="flex-1 min-w-0">
-              <span className="eyebrow block">{crop} Care Plan</span>
-              <h1 className="text-2xl font-bold font-outfit text-slate-100 capitalize truncate">{topPrediction.class_name}</h1>
-              <p className="text-xs text-slate-400 mt-1 line-clamp-2">
-                Confidence: {Math.round(topPrediction.confidence * 100)}% · Classification status active.
-              </p>
-            </div>
-            <span className={`result-icon large ${severity.toLowerCase()} shrink-0`}>
-              <Sprout size={30} />
-            </span>
-          </section>
+      {/* Disease Search & Browse */}
+      <section className="search-container">
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search disease (e.g. blight, armyworm)..."
+          className="search-input text-xs"
+        />
+        <Search size={14} className="search-icon-inside" />
+      </section>
 
-          <section className="image-report">
-            {preview ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={preview} alt="Diagnosed leaf" className="w-full h-full object-cover" />
-            ) : (
-              <Image src="/assets/screens3.png" alt="Disease detail reference" fill sizes="360px" priority />
-            )}
-            <div className="report-badge shadow-md">
-              <Sparkles size={14} className="text-green-400" />
-              AI confidence {Math.round(topPrediction.confidence * 100)}%
-            </div>
-          </section>
-
-          <section className="field-grid">
-            {fieldMetrics.map((metric) => (
-              <div className="metric-tile" key={metric.label}>
-                <span>
-                  <metric.icon size={18} />
-                </span>
-                <small>{metric.label}</small>
-                <strong>{metric.value}</strong>
-              </div>
-            ))}
-          </section>
-
-          {/* Real treatment card from model inference */}
-          <TreatmentCard
-            title={topPrediction.advice_title}
-            steps={topPrediction.advice_steps}
-          />
-
-          <section className="section care-tips">
-            <div className="section-heading">
-              <h2>Prevention Guidelines</h2>
-            </div>
-            {careCards.map((card) => (
-              <article className="care-tip" key={card.title}>
-                <span>
-                  <card.icon size={20} />
-                </span>
-                <div>
-                  <h3>{card.title}</h3>
-                  <p>{card.text}</p>
+      {/* Horizontal Disease Selector Row */}
+      <section className="horizontal-scroll-container">
+        <div className="flex gap-2.5 pb-2 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
+          {filteredDiseases.map((key) => {
+            const d = diseaseDatabase[key];
+            const isSel = key === selectedKey;
+            const isDiag = topPrediction && topPrediction.class_name.toLowerCase() === key;
+            return (
+              <button
+                key={key}
+                onClick={() => setSelectedKey(key)}
+                className={`disease-selector-card flex-shrink-0 text-left p-3 rounded-2xl border transition-all duration-300 ${
+                  isSel
+                    ? "bg-white/10 border-green-400/50 shadow-md shadow-green-500/5 scale-105"
+                    : "bg-white/5 border-white/5 hover:bg-white/8 hover:border-white/10"
+                }`}
+                style={{ width: "135px" }}
+              >
+                <div className="flex items-center justify-between gap-1 mb-1">
+                  <span className="text-[10px] text-slate-400 truncate font-semibold block capitalize">{d.crop.split(",")[0]}</span>
+                  {isDiag && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse shrink-0" title="Active diagnosis" />
+                  )}
                 </div>
-              </article>
-            ))}
-          </section>
-        </>
-      ) : (
-        <div className="flex flex-col items-center justify-center p-12 text-center space-y-4 min-h-[500px]">
-          <Sprout className="w-16 h-16 text-slate-600 animate-bounce" />
-          <div className="space-y-1">
-            <h3 className="text-sm font-semibold text-slate-300">No Active Diagnosis</h3>
-            <p className="text-xs text-slate-500 max-w-[200px] leading-relaxed">
-              Please scan a leaf using the camera tab first to generate a care plan.
+                <strong className="text-xs font-bold text-slate-100 block truncate capitalize mb-1">{d.name}</strong>
+                <div className="flex justify-between items-center mt-2">
+                  <span className={`text-[8px] font-extrabold uppercase px-1.5 py-0.5 rounded ${
+                    d.category === "insect" ? "bg-amber-500/10 text-amber-400" :
+                    d.category === "viral" ? "bg-red-500/10 text-red-400" :
+                    d.category === "healthy" ? "bg-green-500/10 text-green-400" : "bg-sky-500/10 text-sky-400"
+                  }`}>
+                    {d.category}
+                  </span>
+                  <span className={`text-[8px] font-extrabold uppercase px-1.5 py-0.5 rounded ${
+                    d.risk === "high" ? "bg-red-500/15 text-red-300" :
+                    d.risk === "medium" ? "bg-amber-500/15 text-amber-300" : "bg-green-500/15 text-green-300"
+                  }`}>
+                    {d.risk}
+                  </span>
+                </div>
+              </button>
+            );
+          })}
+          {filteredDiseases.length === 0 && (
+            <div className="text-[11px] text-slate-500 italic p-3">No matching diseases found.</div>
+          )}
+        </div>
+      </section>
+
+      {/* Disease Detail Section */}
+      <section className="disease-details-box space-y-4 animate-fade-in">
+        {/* Hero Info */}
+        <div className="disease-hero p-4 bg-white/5 border border-white/5 rounded-2xl flex items-center justify-between gap-3">
+          <div className="flex-1 min-w-0">
+            <span className="eyebrow block flex items-center gap-1">
+              <Sprout size={11} className="text-green-400" />
+              {disease.crop} Care Plan
+            </span>
+            <h2 className="text-xl font-bold font-outfit text-slate-100 capitalize mt-0.5">{disease.name}</h2>
+            <p className="text-[10px] text-slate-400 mt-1 flex items-center gap-2">
+              <span className="capitalize">Category: <strong>{disease.category}</strong></span>
+              <span>•</span>
+              <span>Risk: <strong className={
+                disease.risk === "high" ? "text-red-400" :
+                disease.risk === "medium" ? "text-amber-400" : "text-green-400"
+              }>{disease.risk}</strong></span>
             </p>
           </div>
+          <span className={`result-icon large ${
+            disease.risk === "high" ? "treat" :
+            disease.risk === "medium" ? "watch" : "healthy"
+          } shrink-0`}>
+            {disease.category === "insect" ? <Bug size={24} /> :
+             disease.category === "healthy" ? <ShieldCheck size={24} /> : <Biohazard size={24} />}
+          </span>
         </div>
-      )}
+
+        {/* Diagnostic Leaf Image */}
+        <section className="image-report relative rounded-2xl overflow-hidden shadow-lg border border-white/5" style={{ height: "160px" }}>
+          {isActiveDiagnosis && preview ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={preview} alt="Diagnosed leaf" className="w-full h-full object-cover" />
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={getCoverImage(currentDiseaseKey)} alt="Disease reference" className="w-full h-full object-cover" />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+          
+          <div className="report-badge absolute bottom-3 left-3 shadow-md flex items-center gap-1.5 px-2.5 py-1 bg-black/60 backdrop-blur-md rounded-xl text-[10px] text-slate-100 font-bold border border-white/10">
+            {isActiveDiagnosis ? (
+              <>
+                <Sparkles size={11} className="text-green-400" />
+                <span>Active Leaf Scan Diagnosis ({Math.round(topPrediction!.confidence * 100)}%)</span>
+              </>
+            ) : (
+              <>
+                <BookOpen size={11} className="text-green-400" />
+                <span>Standard Agronomic Reference</span>
+              </>
+            )}
+          </div>
+        </section>
+
+        {/* Symptoms Section */}
+        {disease.symptoms && (
+          <div className="p-4 bg-white/5 border border-white/5 rounded-2xl space-y-1">
+            <h4 className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+              <Info size={13} className="text-green-400" />
+              Symptoms identification
+            </h4>
+            <p className="text-[11px] leading-relaxed text-slate-300 font-medium pt-0.5">{disease.symptoms}</p>
+          </div>
+        )}
+
+        {/* Treatment & Remediation Recipes */}
+        <div className="space-y-3">
+          <div className="section-heading">
+            <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400">Remediation & Treatments</h2>
+          </div>
+
+          {/* Treatment Tabs */}
+          <section className="pill-toggle-container flex justify-between bg-white/5 border border-white/5 p-1 rounded-2xl">
+            {[
+              { type: "organic", icon: Leaf, label: "Organic" },
+              { type: "chemical", icon: Beaker, label: "Chemical" },
+              { type: "cultural", icon: Scissors, label: "Cultural" }
+            ].map((item) => (
+              <button
+                key={item.type}
+                onClick={() => setActiveTreatmentTab(item.type as any)}
+                className={`pill-toggle-button flex-1 flex items-center justify-center gap-1 py-2 rounded-xl text-[11px] font-bold transition-all duration-300 ${
+                  activeTreatmentTab === item.type
+                    ? "bg-green text-slate-100 shadow-md shadow-green-500/10"
+                    : "text-slate-400 hover:text-slate-200"
+                }`}
+              >
+                <item.icon size={12} />
+                <span>{item.label}</span>
+              </button>
+            ))}
+          </section>
+
+          {/* Selected Treatment Recipe Card */}
+          {currentRecipe && (
+            <div className="p-4 bg-white/4 border border-white/5 rounded-3xl space-y-4 shadow-inner">
+              <div>
+                <span className="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded bg-green-500/10 text-green-400 border border-green-500/10 inline-block mb-1.5">
+                  {activeTreatmentTab} formulated remedy
+                </span>
+                <h3 className="text-sm font-bold text-slate-100 font-outfit leading-snug">{currentRecipe.title}</h3>
+                <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">{currentRecipe.summary}</p>
+              </div>
+
+              {/* Required Materials */}
+              {currentRecipe.materials && currentRecipe.materials.length > 0 && currentRecipe.materials[0] !== "None" && (
+                <div className="space-y-1.5">
+                  <h4 className="text-[11px] font-extrabold uppercase tracking-wide text-slate-300">Required Materials</h4>
+                  <div className="grid grid-cols-1 gap-1.5">
+                    {currentRecipe.materials.map((m, i) => (
+                      <div key={i} className="flex items-center gap-2 text-[10.5px] text-slate-300 font-medium">
+                        <CheckCircle size={13} className="text-green-400 shrink-0" />
+                        <span>{m}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Step-by-Step Instructions */}
+              {currentRecipe.steps && currentRecipe.steps.length > 0 && (
+                <div className="space-y-2">
+                  <h4 className="text-[11px] font-extrabold uppercase tracking-wide text-slate-300">Step-by-Step Execution</h4>
+                  <div className="space-y-2.5">
+                    {currentRecipe.steps.map((step, i) => (
+                      <div key={i} className="flex gap-2.5 items-start">
+                        <span className="w-4.5 h-4.5 rounded-full bg-white/8 text-[9px] font-extrabold text-slate-200 flex items-center justify-center shrink-0 mt-0.5">
+                          {i + 1}
+                        </span>
+                        <p className="text-[10.5px] leading-relaxed text-slate-300 font-medium" style={{ margin: 0 }}>
+                          {step}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Safety Instructions */}
+              {currentRecipe.safety && (
+                <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/10 text-[10px] text-amber-200/90 leading-relaxed flex gap-2">
+                  <Info size={14} className="text-amber-400 shrink-0 mt-0.5" />
+                  <p className="font-semibold" style={{ margin: 0 }}>{currentRecipe.safety}</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Prevention Guidelines (Disease-Specific!) */}
+        <div className="space-y-3 pt-1">
+          <div className="section-heading">
+            <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400">Disease-Specific Prevention</h2>
+          </div>
+          <div className="space-y-2.5">
+            {disease.prevention && disease.prevention.length > 0 ? (
+              disease.prevention.map((item, idx) => (
+                <article key={idx} className="care-tip flex gap-3 p-3 bg-white/5 border border-white/5 rounded-2xl hover:bg-white/8 transition-colors duration-300">
+                  <span className="p-2 rounded-xl bg-white/8 shrink-0 flex items-center justify-center" style={{ width: "36px", height: "36px" }}>
+                    {getPreventionIcon(item.iconName)}
+                  </span>
+                  <div className="space-y-0.5">
+                    <h3 className="text-xs font-bold text-slate-100 leading-snug">{item.title}</h3>
+                    <p className="text-[10.5px] text-slate-400 leading-relaxed">{item.text}</p>
+                  </div>
+                </article>
+              ))
+            ) : (
+              <div className="text-[11px] text-slate-500 italic p-3">No specific prevention rules defined.</div>
+            )}
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

@@ -69,9 +69,9 @@ function getSeverityFromClass(className: string): "Healthy" | "Watch" | "Treat" 
   const name = className.toLowerCase();
   if (name === "healthy") return "Healthy";
   if (
-    name.includes("spot") || 
-    name.includes("beetle") || 
-    name.includes("miner") || 
+    name.includes("spot") ||
+    name.includes("beetle") ||
+    name.includes("miner") ||
     name.includes("grasshopper") ||
     name.includes("grasshoper")
   ) {
@@ -83,17 +83,17 @@ function getSeverityFromClass(className: string): "Healthy" | "Watch" | "Treat" 
 export default function CropSenseApp() {
   const [activeTab, setActiveTab] = useState<Tab>("home");
   const [preview, setPreview] = useState<string | null>(null);
-  
+
   // Model state
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [topPrediction, setTopPrediction] = useState<PredictionResult["top"] | null>(null);
   const [predictions, setPredictions] = useState<ClassPrediction[]>([]);
-  
+
   // History and Settings state
   const [history, setHistory] = useState<ScanHistoryItem[]>([]);
   const [isModelPanelOpen, setIsModelPanelOpen] = useState(false);
-  
+
   // Samples state
   const [samples, setSamples] = useState<SampleImage[]>([]);
   const [currentSample, setCurrentSample] = useState<SampleImage | null>(null);
@@ -149,7 +149,7 @@ export default function CropSenseApp() {
 
     const localUrl = URL.createObjectURL(file);
     setPreview(localUrl);
-    
+
     setIsLoading(true);
     try {
       const result = await predictImage(file);
@@ -172,7 +172,7 @@ export default function CropSenseApp() {
     setError(null);
     setTopPrediction(null);
     setPredictions([]);
-    
+
     const randomSample = samples[Math.floor(Math.random() * samples.length)];
     setCurrentSample(randomSample);
     setPreview(randomSample.path);
@@ -267,9 +267,9 @@ export default function CropSenseApp() {
           )}
 
           {activeTab === "care" && (
-            <CareView 
-              topPrediction={topPrediction} 
-              preview={preview} 
+            <CareView
+              topPrediction={topPrediction}
+              preview={preview}
               crop={topPrediction ? getCropFromClass(topPrediction.class_name) : "Crop"}
               severity={topPrediction ? getSeverityFromClass(topPrediction.class_name) : "Watch"}
             />
@@ -417,7 +417,7 @@ function ScanView({
           <RotateCcw size={20} />
         </button>
         <div>
-          <span className="eyebrow">TensorFlow AI</span>
+          <span className="eyebrow">CropSense AI</span>
           <h1>Leaf Diagnosis</h1>
         </div>
       </header>
@@ -433,7 +433,7 @@ function ScanView({
             </div>
           )}
           <div className="scan-corners" aria-hidden="true" />
-          
+
           {preview && (
             <button className="retake-button" onClick={onRetake} aria-label="Clear photo">
               <RotateCcw size={20} className="text-slate-200" />
@@ -447,15 +447,15 @@ function ScanView({
             <span>Gallery</span>
             <input type="file" accept="image/*" onChange={onImagePick} />
           </label>
-          
-          <label 
+
+          <label
             className="shutter-button hover:scale-105 active:scale-95 transition-all duration-300 shadow-xl"
             aria-label="Capture photo"
           >
             <Camera size={30} />
             <input type="file" accept="image/*" capture="environment" onChange={onImagePick} />
           </label>
-          
+
           <label className="picker-button hover:bg-white/20 transition-all duration-300">
             <Upload size={20} />
             <span>Files</span>
@@ -466,7 +466,7 @@ function ScanView({
 
       {/* Test Sample Trigger Button */}
       {!isLoading && (
-        <button 
+        <button
           onClick={onLoadSample}
           className="care-link hover:bg-white/20 transition-all duration-300 flex items-center justify-center gap-2"
           style={{ marginTop: "8px", border: "1px solid rgba(255,255,255,0.12)", background: "rgba(255,255,255,0.06)" }}
@@ -501,8 +501,8 @@ function ScanView({
             <h4 className="text-xs font-bold uppercase tracking-wider">Inference Server Error</h4>
             <p className="text-[10px] text-slate-300 mt-1">{error}</p>
           </div>
-          <button 
-            onClick={onLoadSample} 
+          <button
+            onClick={onLoadSample}
             className="text-[10px] bg-red-500/20 hover:bg-red-500/30 px-3 py-1.5 rounded-xl font-bold uppercase transition-colors"
           >
             Retry Scan
@@ -613,9 +613,9 @@ function CareView({
           </section>
 
           {/* Real treatment card from model inference */}
-          <TreatmentCard 
-            title={topPrediction.advice_title} 
-            steps={topPrediction.advice_steps} 
+          <TreatmentCard
+            title={topPrediction.advice_title}
+            steps={topPrediction.advice_steps}
           />
 
           <section className="section care-tips">

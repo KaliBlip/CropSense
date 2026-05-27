@@ -31,6 +31,7 @@ html,
 body {
   min-height: 100%;
   margin: 0;
+  background-color: #071009;
 }
 
 body {
@@ -800,6 +801,14 @@ button {
 }
 
 @media (max-width: 520px) {
+  html,
+  body {
+    height: 100dvh;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+  }
+
   .app-stage {
     display: block;
     padding: 0;
@@ -823,7 +832,10 @@ button {
   }
 
   .tab-bar {
-    bottom: max(4px, env(safe-area-inset-bottom));
+    position: fixed;
+    left: 18px;
+    right: 18px;
+    bottom: max(6px, env(safe-area-inset-bottom));
   }
 }
 

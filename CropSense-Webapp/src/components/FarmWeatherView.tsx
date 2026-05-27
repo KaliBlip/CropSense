@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { 
   Sun, 
   CloudRain, 
@@ -9,7 +9,8 @@ import {
   Droplets, 
   Wind, 
   ChevronLeft, 
-  Sparkles
+  Sparkles,
+  RefreshCw
 } from "lucide-react";
 
 interface WeatherData {
@@ -22,7 +23,72 @@ interface WeatherData {
 }
 
 export default function FarmWeatherView({ onBack }: { onBack: () => void }) {
-  const [selectedCondition, setSelectedCondition] = useState<"sunny" | "rainy" | "cloudy">("cloudy");
+  const [selectedCondition, setSelectedCondition] = useState<"sunny" | "rainy" | "cloudy" | "live">("live");
+  const [liveWeather, setLiveWeather] = useState<WeatherData>({
+    temp: "--°C",
+    humidity: "--%",
+    wind: "-- km/h",
+    moisture: "--",
+    condition: "cloudy",
+    advisory: "Connecting to meteorological satellites..."
+  });
+
+  useEffect(() => {
+    async function fetchLiveWeather() {
+      try {
+        const res = await fetch(
+          "https://api.open-meteo.com/v1/forecast?latitude=7.3853&longitude=-1.3562&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&timezone=auto"
+        );
+        if (!res.ok) throw new Error("API call failed");
+        const data = await res.json();
+        
+        const tempVal = Math.round(data.current.temperature_2m);
+        const humidityVal = Math.round(data.current.relative_humidity_2m);
+        const windVal = Math.round(data.current.wind_speed_10m);
+        const code = data.current.weather_code;
+
+        let cond: "sunny" | "rainy" | "cloudy" = "cloudy";
+        if (code === 0) {
+          cond = "sunny";
+        } else if ([1, 2, 3, 45, 48].includes(code)) {
+          cond = "cloudy";
+        } else {
+          cond = "rainy";
+        }
+
+        let advisory = "Optimal conditions. Standard crop monitoring routines active.";
+        let moisture = "48% (Optimal)";
+        if (cond === "sunny") {
+          advisory = "Sunny conditions detected. Evapotranspiration is active. Keep Cashew and Tomato rows hydrated.";
+          moisture = "25% (Dry)";
+        } else if (cond === "rainy") {
+          advisory = "Active rainfall detected. Septoria and leaf spot risk elevated. Avoid spraying chemical treatments.";
+          moisture = "82% (Wet)";
+        }
+
+        setLiveWeather({
+          temp: `${tempVal}°C`,
+          humidity: `${humidityVal}%`,
+          wind: `${windVal} km/h`,
+          moisture,
+          condition: cond,
+          advisory
+        });
+      } catch (err) {
+        console.warn("Failed to fetch weather from Open-Meteo, using standard baseline:", err);
+        setLiveWeather({
+          temp: "27°C",
+          humidity: "60%",
+          wind: "10 km/h",
+          moisture: "45% (Optimal)",
+          condition: "cloudy",
+          advisory: "Offline mode. Showing simulated baseline weather for Ejura region."
+        });
+      }
+    }
+
+    fetchLiveWeather();
+  }, []);
 
   const conditionConfigs: Record<"sunny" | "rainy" | "cloudy", WeatherData> = {
     sunny: {
@@ -51,7 +117,7 @@ export default function FarmWeatherView({ onBack }: { onBack: () => void }) {
     }
   };
 
-  const current = conditionConfigs[selectedCondition];
+  const current = selectedCondition === "live" ? liveWeather : conditionConfigs[selectedCondition];
 
   return (
     <div className="view space-y-5">
@@ -72,8 +138,19 @@ export default function FarmWeatherView({ onBack }: { onBack: () => void }) {
 
       {/* Interactive condition toggle */}
       <section className="glass-card" style={{ padding: "14px" }}>
-        <h3 className="glass-card-title">Simulate Forecast Condition</h3>
-        <div className="grid-3" style={{ marginTop: "10px" }}>
+        <h3 className="glass-card-title">Forecast Mode & Simulation</h3>
+        <div className="grid-4" style={{ marginTop: "10px" }}>
+          <button
+            onClick={() => setSelectedCondition("live")}
+            className={`pill-toggle-button ${selectedCondition === "live" ? "active" : ""}`}
+            style={{
+              border: "1px solid rgba(255,255,255,0.06)",
+              background: selectedCondition === "live" ? "var(--green)" : "rgba(255,255,255,0.04)"
+            }}
+          >
+            <RefreshCw size={13} className={selectedCondition === "live" ? "animate-spin" : ""} style={{ animationDuration: "4s" }} />
+            <span>Live</span>
+          </button>
           {(["sunny", "cloudy", "rainy"] as const).map((cond) => (
             <button
               key={cond}
@@ -84,9 +161,9 @@ export default function FarmWeatherView({ onBack }: { onBack: () => void }) {
                 background: selectedCondition === cond ? "var(--green)" : "rgba(255,255,255,0.04)"
               }}
             >
-              {cond === "sunny" && <Sun size={14} />}
-              {cond === "cloudy" && <Cloud size={14} />}
-              {cond === "rainy" && <CloudRain size={14} />}
+              {cond === "sunny" && <Sun size={13} />}
+              {cond === "cloudy" && <Cloud size={13} />}
+              {cond === "rainy" && <CloudRain size={13} />}
               <span style={{ textTransform: "capitalize" }}>{cond}</span>
             </button>
           ))}

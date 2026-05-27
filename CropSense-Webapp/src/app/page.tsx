@@ -422,7 +422,7 @@ function ScanView({
         <div className="camera-frame" style={{ aspectRatio: '1 / 1' }}>
           {preview ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={preview} alt="Selected crop preview" className="absolute inset-0 w-full h-full object-cover" />
+            <img src={preview} alt="Selected crop preview" className="w-full h-full object-cover" />
           ) : (
             <div style={{ position: "relative" }} className="w-full h-full">
               <Image src="/assets/screens2.png" alt="Leaf scan reference" fill sizes="360px" priority />

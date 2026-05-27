@@ -16,7 +16,7 @@ const nextConfig = {
     return [
       {
         source: "/api/predict",
-        destination: "http://127.0.0.1:8000/predict"
+        destination: process.env.BACKEND_API_URL || "https://kaliboii-cropsense.hf.space/predict"
       }
     ];
   }

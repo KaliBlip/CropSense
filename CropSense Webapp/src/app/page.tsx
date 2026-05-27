@@ -156,7 +156,7 @@ export default function CropSenseApp() {
       processPredictionResult(result, localUrl);
     } catch (err: any) {
       console.error(err);
-      setError("Prediction failed. Make sure the FastAPI backend is running on http://127.0.0.1:8000.");
+      setError(`Prediction failed: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
       setIsLoading(false);
     }
@@ -183,7 +183,7 @@ export default function CropSenseApp() {
       processPredictionResult(result, randomSample.path);
     } catch (err: any) {
       console.error(err);
-      setError("Prediction failed. Make sure the FastAPI backend is running on http://127.0.0.1:8000.");
+      setError(`Prediction failed: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
       setIsLoading(false);
     }
@@ -428,7 +428,7 @@ function ScanView({
             // eslint-disable-next-line @next/next/no-img-element
             <img src={preview} alt="Selected crop preview" className="w-full h-full object-cover" />
           ) : (
-            <div className="relative w-full h-full min-h-[390px]">
+            <div style={{ position: "relative" }} className="w-full h-full min-h-[390px]">
               <Image src="/assets/screens2.png" alt="Leaf scan reference" fill sizes="360px" priority />
             </div>
           )}

@@ -24,14 +24,34 @@ from disease_advice import get_advice
 IMG_SIZE = (224, 224)
 
 # Model path — resolve relative to this file so it works from any CWD.
-# The SavedModel lives in the sibling Python implementation directory.
 _THIS_DIR = Path(__file__).resolve().parent
-_PROJECT_ROOT = _THIS_DIR.parent.parent  # CropSense/
+
+def find_model_dir(start_path: Path) -> Path | None:
+    # Look for the resnet50_saved_model dir, or any dir containing saved_model.pb
+    for p in start_path.rglob("saved_model.pb"):
+        return p.parent
+    for p in start_path.rglob("resnet50_saved_model"):
+        if p.is_dir():
+            return p
+    return None
+
+# Check for model in current working directory recursively (for HF Spaces / Docker)
+# Often HF clones to /home/user/app
+_app_dir = Path("/home/user/app") if Path("/home/user/app").exists() else _THIS_DIR
+
+_found_model = find_model_dir(_app_dir)
+
+if _found_model:
+    _default_model_path = _found_model
+else:
+    # Fallback to local dev structure
+    _PROJECT_ROOT = _THIS_DIR.parent.parent  # CropSense/
+    _default_model_path = _PROJECT_ROOT / "CropSense Python Implementation" / "CropSense_Output" / "resnet50_saved_model"
+
 SAVED_MODEL_PATH = os.environ.get(
     "CROPSENSE_MODEL_PATH",
-    str(_PROJECT_ROOT / "CropSense Python Implementation" / "CropSense_Output" / "resnet50_saved_model"),
+    str(_default_model_path),
 )
-
 HARDCODED_CLASSES = [
     "anthracnose",
     "bacterial blight",
@@ -72,7 +92,13 @@ def _load_model() -> None:
 
     model_path = Path(SAVED_MODEL_PATH)
     if not model_path.exists():
-        raise RuntimeError(f"Model not found at: {model_path}")
+        import os
+        try:
+            contents = os.listdir(_app_dir)
+            debug_info = f"Contents of {_app_dir}: {contents}"
+        except Exception as e:
+            debug_info = f"Could not list {_app_dir}: {e}"
+        raise RuntimeError(f"Model not found at: {model_path}. {debug_info}")
 
     logger.info("Loading SavedModel from %s …", model_path)
 

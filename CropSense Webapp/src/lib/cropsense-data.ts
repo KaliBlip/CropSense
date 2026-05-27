@@ -26,8 +26,10 @@ export const modelClasses = [
   "bacterial blight",
   "brown spot",
   "fall armyworm",
+  "grasshoper",
   "grasshopper",
   "green mite",
+  "gumosis",
   "gummosis",
   "healthy",
   "leaf beetle",
@@ -39,8 +41,10 @@ export const modelClasses = [
   "red rust",
   "septoria leaf spot",
   "streak virus",
+  "verticulium wilt",
   "verticillium wilt"
 ];
+
 
 export const diagnoses: Diagnosis[] = [
   {

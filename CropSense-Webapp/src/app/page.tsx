@@ -29,8 +29,12 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import PredictionResults from "@/components/PredictionResults";
 import TreatmentCard from "@/components/TreatmentCard";
 import ModelInfoPanel from "@/components/ModelInfoPanel";
+import FarmWeatherView from "@/components/FarmWeatherView";
+import CropInventoryView from "@/components/CropInventoryView";
+import PestLibraryView from "@/components/PestLibraryView";
+import TreatmentAssistantView from "@/components/TreatmentAssistantView";
 
-type Tab = "home" | "scan" | "care";
+type Tab = "home" | "scan" | "care" | "weather" | "crops" | "treat" | "pests";
 
 interface SampleImage {
   category: string;
@@ -238,6 +242,7 @@ export default function CropSenseApp() {
               onScan={() => setActiveTab("scan")}
               onSelectHistory={handleHistoryItemSelect}
               onOpenSpecs={() => setIsModelPanelOpen(true)}
+              onNavigate={(route) => setActiveTab(route)}
             />
           )}
 
@@ -270,10 +275,33 @@ export default function CropSenseApp() {
               severity={topPrediction ? getSeverityFromClass(topPrediction.class_name) : "Watch"}
             />
           )}
+
+          {activeTab === "weather" && (
+            <FarmWeatherView onBack={() => setActiveTab("home")} />
+          )}
+
+          {activeTab === "crops" && (
+            <CropInventoryView 
+              onBack={() => setActiveTab("home")} 
+              onScan={() => setActiveTab("scan")} 
+            />
+          )}
+
+          {activeTab === "treat" && (
+            <TreatmentAssistantView onBack={() => setActiveTab("home")} />
+          )}
+
+          {activeTab === "pests" && (
+            <PestLibraryView onBack={() => setActiveTab("home")} />
+          )}
         </div>
 
         <nav className="tab-bar" aria-label="Primary">
-          <TabButton active={activeTab === "home"} label="Home" onClick={() => setActiveTab("home")}>
+          <TabButton 
+            active={["home", "weather", "crops", "treat", "pests"].includes(activeTab)} 
+            label="Home" 
+            onClick={() => setActiveTab("home")}
+          >
             <Home size={22} />
           </TabButton>
           <button
@@ -302,17 +330,19 @@ function HomeView({
   history,
   onScan,
   onSelectHistory,
-  onOpenSpecs
+  onOpenSpecs,
+  onNavigate
 }: {
   history: ScanHistoryItem[];
   onScan: () => void;
   onSelectHistory: (item: ScanHistoryItem) => void;
   onOpenSpecs: () => void;
+  onNavigate: (route: Tab) => void;
 }) {
   return (
     <div className="view home-view space-y-5">
       <header className="top-row">
-        <button className="weather-pill" aria-label="Current farm weather">
+        <button className="weather-pill" aria-label="Current farm weather" onClick={() => onNavigate("weather")}>
           <span className="weather-icon">☔</span>
           <span>
             <small>Ejura Farm</small>
@@ -350,11 +380,25 @@ function HomeView({
           <h2>Quick access</h2>
         </div>
         <div className="quick-row">
-          {quickActions.map((action) => (
-            <button className="quick-action" key={action.label} aria-label={action.label}>
-              <action.icon size={23} />
-            </button>
-          ))}
+          {quickActions.map((action) => {
+            const routeMap: Record<string, Tab> = {
+              Weather: "weather",
+              Crops: "crops",
+              Treat: "treat",
+              Pests: "pests"
+            };
+            const route = routeMap[action.label];
+            return (
+              <button 
+                className="quick-action" 
+                key={action.label} 
+                aria-label={action.label}
+                onClick={() => route && onNavigate(route)}
+              >
+                <action.icon size={23} />
+              </button>
+            );
+          })}
         </div>
       </section>
 

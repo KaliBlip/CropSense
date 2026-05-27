@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { ChangeEvent, useEffect, useState } from "react";
 import {
-  Bell,
   Camera,
   ChevronRight,
   Home,
@@ -230,10 +229,7 @@ export default function CropSenseApp() {
   return (
     <main className="app-stage">
       <section className="phone-shell relative flex flex-col" aria-label="CropSense mobile app">
-        <div className="status-bar" aria-hidden="true">
-          <span>9:41</span>
-          <span className="status-icons">●●● 5G ▰</span>
-        </div>
+
 
         <div className="screen-scroll flex-1">
           {activeTab === "home" && (
@@ -423,12 +419,12 @@ function ScanView({
       </header>
 
       <section className="camera-panel">
-        <div className="camera-frame">
+        <div className="camera-frame" style={{ aspectRatio: '1 / 1' }}>
           {preview ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={preview} alt="Selected crop preview" className="w-full h-full object-cover" />
           ) : (
-            <div style={{ position: "relative" }} className="w-full h-full min-h-[390px]">
+            <div style={{ position: "relative" }} className="w-full h-full">
               <Image src="/assets/screens2.png" alt="Leaf scan reference" fill sizes="360px" priority />
             </div>
           )}

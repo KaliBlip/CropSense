@@ -100,7 +100,7 @@ button {
   height: 100%;
   overflow-y: auto;
   scrollbar-width: none;
-  padding: 52px 20px 118px;
+  padding: 24px 20px 118px;
 }
 
 .screen-scroll::-webkit-scrollbar {
@@ -389,10 +389,14 @@ button {
 
 .camera-frame {
   position: relative;
-  min-height: 390px;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   border-radius: 28px;
   background: #293923;
+}
+
+.status-bar {
+  display: none;
 }
 
 .camera-frame::after {
@@ -804,7 +808,7 @@ button {
   }
 
   .screen-scroll {
-    padding-top: calc(48px + env(safe-area-inset-top));
+    padding-top: max(20px, env(safe-area-inset-top));
     padding-bottom: calc(112px + env(safe-area-inset-bottom));
   }
 
@@ -822,10 +826,6 @@ button {
   .hero-content h1,
   .disease-hero h1 {
     font-size: 28px;
-  }
-
-  .camera-frame {
-    min-height: 350px;
   }
 
   .confidence-row {

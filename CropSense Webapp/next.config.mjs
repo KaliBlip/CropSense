@@ -12,14 +12,6 @@ const nextConfig = {
       }
     ]
   },
-  async rewrites() {
-    return [
-      {
-        source: "/api/predict",
-        destination: process.env.BACKEND_API_URL || "https://kaliboii-cropsense.hf.space/predict"
-      }
-    ];
-  }
 };
 
 export default nextConfig;

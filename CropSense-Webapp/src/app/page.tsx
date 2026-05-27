@@ -28,7 +28,8 @@ import {
   Bug,
   Biohazard,
   AlertOctagon,
-  BookOpen
+  BookOpen,
+  ShieldCheck
 } from "lucide-react";
 import {
   careCards,
@@ -288,6 +289,7 @@ export default function CropSenseApp() {
               preview={preview}
               crop={topPrediction ? getCropFromClass(topPrediction.class_name) : "Crop"}
               severity={topPrediction ? getSeverityFromClass(topPrediction.class_name) : "Watch"}
+              samples={samples}
             />
           )}
 
@@ -609,12 +611,14 @@ function CareView({
   topPrediction,
   preview,
   crop,
-  severity
+  severity,
+  samples
 }: {
   topPrediction: PredictionResult["top"] | null;
   preview: string | null;
   crop: string;
   severity: "Healthy" | "Watch" | "Treat";
+  samples: SampleImage[];
 }) {
   const [selectedKey, setSelectedKey] = useState<string>(
     topPrediction ? topPrediction.class_name.toLowerCase() : "healthy"
@@ -655,7 +659,7 @@ function CareView({
     return matchesSearch;
   });
 
-  const isActiveDiagnosis = topPrediction && topPrediction.class_name.toLowerCase() === selectedKey;
+  const isActiveDiagnosis = topPrediction && getNormalizedKey(topPrediction.class_name) === getNormalizedKey(selectedKey);
 
   // Render icons dynamically
   function getPreventionIcon(iconName: string) {
@@ -673,7 +677,13 @@ function CareView({
 
   // Cover image mapper for diseases
   const getCoverImage = (key: string) => {
-    switch (key) {
+    const normalizedKey = getNormalizedKey(key);
+    const matches = samples.filter(s => getNormalizedKey(s.category) === normalizedKey);
+    if (matches.length > 0) {
+      return matches[0].path;
+    }
+
+    switch (normalizedKey) {
       case "anthracnose":
         return "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?auto=format&fit=crop&w=600&q=80";
       case "bacterial blight":
@@ -756,53 +766,51 @@ function CareView({
       </section>
 
       {/* Horizontal Disease Selector Row */}
-      <section className="horizontal-scroll-container">
-        <div className="flex gap-2.5 pb-2 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
-          {filteredDiseases.map((key) => {
-            const d = diseaseDatabase[key];
-            const isSel = key === selectedKey;
-            const isDiag = topPrediction && topPrediction.class_name.toLowerCase() === key;
-            return (
-              <button
-                key={key}
-                onClick={() => setSelectedKey(key)}
-                className={`disease-selector-card flex-shrink-0 text-left p-3 rounded-2xl border transition-all duration-300 ${
-                  isSel
-                    ? "bg-white/10 border-green-400/50 shadow-md shadow-green-500/5 scale-105"
-                    : "bg-white/5 border-white/5 hover:bg-white/8 hover:border-white/10"
-                }`}
-                style={{ width: "135px" }}
-              >
-                <div className="flex items-center justify-between gap-1 mb-1">
-                  <span className="text-[10px] text-slate-400 truncate font-semibold block capitalize">{d.crop.split(",")[0]}</span>
-                  {isDiag && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse shrink-0" title="Active diagnosis" />
-                  )}
-                </div>
-                <strong className="text-xs font-bold text-slate-100 block truncate capitalize mb-1">{d.name}</strong>
-                <div className="flex justify-between items-center mt-2">
-                  <span className={`text-[8px] font-extrabold uppercase px-1.5 py-0.5 rounded ${
-                    d.category === "insect" ? "bg-amber-500/10 text-amber-400" :
-                    d.category === "viral" ? "bg-red-500/10 text-red-400" :
-                    d.category === "healthy" ? "bg-green-500/10 text-green-400" : "bg-sky-500/10 text-sky-400"
-                  }`}>
-                    {d.category}
-                  </span>
-                  <span className={`text-[8px] font-extrabold uppercase px-1.5 py-0.5 rounded ${
-                    d.risk === "high" ? "bg-red-500/15 text-red-300" :
-                    d.risk === "medium" ? "bg-amber-500/15 text-amber-300" : "bg-green-500/15 text-green-300"
-                  }`}>
-                    {d.risk}
-                  </span>
-                </div>
-              </button>
-            );
-          })}
-          {filteredDiseases.length === 0 && (
-            <div className="text-[11px] text-slate-500 italic p-3">No matching diseases found.</div>
-          )}
-        </div>
-      </section>
+      <div className="horizontal-scroll-container flex gap-2.5 pb-2" style={{ scrollbarWidth: "none" }}>
+        {filteredDiseases.map((key) => {
+          const d = diseaseDatabase[key];
+          const isSel = getNormalizedKey(key) === getNormalizedKey(selectedKey);
+          const isDiag = topPrediction && getNormalizedKey(topPrediction.class_name) === getNormalizedKey(key);
+          return (
+            <button
+              key={key}
+              onClick={() => setSelectedKey(key)}
+              className={`disease-selector-card flex-shrink-0 text-left p-3 rounded-2xl border transition-all duration-300 ${
+                isSel
+                  ? "bg-white/10 border-green-400/50 shadow-md shadow-green-500/5 scale-105"
+                  : "bg-white/5 border-white/5 hover:bg-white/8 hover:border-white/10"
+              }`}
+              style={{ width: "135px" }}
+            >
+              <div className="flex items-center justify-between gap-1 mb-1">
+                <span className="text-[10px] text-slate-400 truncate font-semibold block capitalize">{d.crop.split(",")[0]}</span>
+                {isDiag && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse shrink-0" title="Active diagnosis" />
+                )}
+              </div>
+              <strong className="text-xs font-bold text-slate-100 block truncate capitalize mb-1">{d.name}</strong>
+              <div className="flex justify-between items-center mt-2">
+                <span className={`text-[8px] font-extrabold uppercase px-1.5 py-0.5 rounded ${
+                  d.category === "insect" ? "bg-amber-500/10 text-amber-400" :
+                  d.category === "viral" ? "bg-red-500/10 text-red-400" :
+                  d.category === "healthy" ? "bg-green-500/10 text-green-400" : "bg-sky-500/10 text-sky-400"
+                }`}>
+                  {d.category}
+                </span>
+                <span className={`text-[8px] font-extrabold uppercase px-1.5 py-0.5 rounded ${
+                  d.risk === "high" ? "bg-red-500/15 text-red-300" :
+                  d.risk === "medium" ? "bg-amber-500/15 text-amber-300" : "bg-green-500/15 text-green-300"
+                }`}>
+                  {d.risk}
+                </span>
+              </div>
+            </button>
+          );
+        })}
+        {filteredDiseases.length === 0 && (
+          <div className="text-[11px] text-slate-500 italic p-3">No matching diseases found.</div>
+        )}
+      </div>
 
       {/* Disease Detail Section */}
       <section className="disease-details-box space-y-4 animate-fade-in">
@@ -860,12 +868,12 @@ function CareView({
 
         {/* Symptoms Section */}
         {disease.symptoms && (
-          <div className="p-4 bg-white/5 border border-white/5 rounded-2xl space-y-1">
-            <h4 className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
-              <Info size={13} className="text-green-400" />
-              Symptoms identification
+          <div className="glass-card" style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+            <h4 className="detail-title" style={{ display: "flex", alignItems: "center", gap: "6px", margin: 0 }}>
+              <Info size={14} className="text-green-400" style={{ color: "var(--green)" }} />
+              <span>Symptoms Identification</span>
             </h4>
-            <p className="text-[11px] leading-relaxed text-slate-300 font-medium pt-0.5">{disease.symptoms}</p>
+            <p className="detail-body" style={{ margin: 0 }}>{disease.symptoms}</p>
           </div>
         )}
 
@@ -887,7 +895,7 @@ function CareView({
                 onClick={() => setActiveTreatmentTab(item.type as any)}
                 className={`pill-toggle-button flex-1 flex items-center justify-center gap-1 py-2 rounded-xl text-[11px] font-bold transition-all duration-300 ${
                   activeTreatmentTab === item.type
-                    ? "bg-green text-slate-100 shadow-md shadow-green-500/10"
+                    ? "active shadow-md shadow-green-500/10"
                     : "text-slate-400 hover:text-slate-200"
                 }`}
               >
@@ -899,23 +907,24 @@ function CareView({
 
           {/* Selected Treatment Recipe Card */}
           {currentRecipe && (
-            <div className="p-4 bg-white/4 border border-white/5 rounded-3xl space-y-4 shadow-inner">
+            <section className="glass-card" style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
               <div>
-                <span className="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded bg-green-500/10 text-green-400 border border-green-500/10 inline-block mb-1.5">
-                  {activeTreatmentTab} formulated remedy
-                </span>
-                <h3 className="text-sm font-bold text-slate-100 font-outfit leading-snug">{currentRecipe.title}</h3>
-                <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">{currentRecipe.summary}</p>
+                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                  <Sparkles size={14} style={{ color: "var(--green)" }} />
+                  <span className="glass-card-title" style={{ margin: 0, textTransform: "uppercase" }}>{activeTreatmentTab} formulated remedy</span>
+                </div>
+                <h2 className="glass-card-header" style={{ margin: "6px 0 0 0" }}>{currentRecipe.title}</h2>
+                <p className="detail-body" style={{ marginTop: "4px" }}>{currentRecipe.summary}</p>
               </div>
 
               {/* Required Materials */}
               {currentRecipe.materials && currentRecipe.materials.length > 0 && currentRecipe.materials[0] !== "None" && (
-                <div className="space-y-1.5">
-                  <h4 className="text-[11px] font-extrabold uppercase tracking-wide text-slate-300">Required Materials</h4>
-                  <div className="grid grid-cols-1 gap-1.5">
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                  <h4 className="detail-title">Required Materials</h4>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                     {currentRecipe.materials.map((m, i) => (
-                      <div key={i} className="flex items-center gap-2 text-[10.5px] text-slate-300 font-medium">
-                        <CheckCircle size={13} className="text-green-400 shrink-0" />
+                      <div key={i} className="bullet-item">
+                        <CheckCircle size={14} style={{ color: "var(--green)", flexShrink: 0 }} />
                         <span>{m}</span>
                       </div>
                     ))}
@@ -925,17 +934,27 @@ function CareView({
 
               {/* Step-by-Step Instructions */}
               {currentRecipe.steps && currentRecipe.steps.length > 0 && (
-                <div className="space-y-2">
-                  <h4 className="text-[11px] font-extrabold uppercase tracking-wide text-slate-300">Step-by-Step Execution</h4>
-                  <div className="space-y-2.5">
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                  <h4 className="detail-title">Step-by-Step Execution</h4>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                     {currentRecipe.steps.map((step, i) => (
-                      <div key={i} className="flex gap-2.5 items-start">
-                        <span className="w-4.5 h-4.5 rounded-full bg-white/8 text-[9px] font-extrabold text-slate-200 flex items-center justify-center shrink-0 mt-0.5">
+                      <div key={i} style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                        <span style={{ 
+                          width: "20px", 
+                          height: "20px", 
+                          borderRadius: "50%", 
+                          background: "rgba(255,255,255,0.08)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: "10px",
+                          fontWeight: "800",
+                          color: "var(--text)",
+                          flexShrink: 0
+                        }}>
                           {i + 1}
                         </span>
-                        <p className="text-[10.5px] leading-relaxed text-slate-300 font-medium" style={{ margin: 0 }}>
-                          {step}
-                        </p>
+                        <p className="detail-body" style={{ margin: 0 }}>{step}</p>
                       </div>
                     ))}
                   </div>
@@ -944,12 +963,12 @@ function CareView({
 
               {/* Safety Instructions */}
               {currentRecipe.safety && (
-                <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/10 text-[10px] text-amber-200/90 leading-relaxed flex gap-2">
-                  <Info size={14} className="text-amber-400 shrink-0 mt-0.5" />
-                  <p className="font-semibold" style={{ margin: 0 }}>{currentRecipe.safety}</p>
+                <div className="warn-banner">
+                  <Info size={16} style={{ color: "var(--amber)", flexShrink: 0, marginTop: "2px" }} />
+                  <p>{currentRecipe.safety}</p>
                 </div>
               )}
-            </div>
+            </section>
           )}
         </div>
 

@@ -302,6 +302,7 @@ html,
 body {
   min-height: 100%;
   margin: 0;
+  overflow-x: hidden;
   background-color: #071009;
 }
 
@@ -329,6 +330,8 @@ button {
   display: grid;
   place-items: center;
   padding: 22px;
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 .phone-shell {
@@ -381,6 +384,7 @@ button {
   overflow-y: auto;
   scrollbar-width: none;
   padding: 24px 20px 104px;
+  min-width: 0;
 }
 
 .screen-scroll::-webkit-scrollbar {
@@ -389,6 +393,7 @@ button {
 
 .view {
   animation: viewIn 360ms ease both;
+  min-width: 0;
 }
 
 @keyframes viewIn {
@@ -416,8 +421,18 @@ button {
 
 .capture-header,
 .care-header {
-  justify-content: space-between;
   margin-bottom: 18px;
+}
+
+.care-header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+}
+
+.care-header .action-row {
+  justify-self: end;
 }
 
 .capture-header h1,
@@ -863,7 +878,7 @@ button {
 }
 
 .care-header {
-  justify-content: flex-end;
+  justify-content: space-between;
 }
 
 .disease-hero {
@@ -1803,7 +1818,9 @@ button {
 /* Horizontal scrollbar hidden rules */
 .horizontal-scroll-container {
   width: 100%;
+  max-width: 100%;
   overflow-x: auto;
+  overscroll-inline: contain;
   scrollbar-width: none; /* Firefox */
 }
 .horizontal-scroll-container::-webkit-scrollbar {

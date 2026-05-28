@@ -469,11 +469,11 @@ function ScanView({
 }) {
   return (
     <div className="view scan-view space-y-4">
-      <header className="capture-header">
+      <header className="capture-header relative">
         <button className="circle-button" aria-label="Retake / reset" onClick={onRetake}>
           <RotateCcw size={20} />
         </button>
-        <div>
+        <div className="absolute inset-x-0 text-center">
           <span className="eyebrow">CropSense AI</span>
           <h1>Leaf Diagnosis</h1>
         </div>
@@ -731,12 +731,13 @@ function CareView({
   return (
     <div className="view care-view space-y-4">
       {/* Header bar */}
-      <header className="care-header flex items-center justify-between pb-1">
-        <div>
+      <header className="care-header pb-1">
+        <div />
+        <div className="text-center">
           <span className="eyebrow block">Agronomy Hub</span>
           <h1 className="text-xl font-bold font-outfit text-slate-100">Care & Treatment</h1>
         </div>
-        <div className="flex gap-2">
+        <div className="action-row flex gap-2">
           {topPrediction && !isActiveDiagnosis && (
             <button
               onClick={() => setSelectedKey(topPrediction.class_name.toLowerCase())}
@@ -747,7 +748,7 @@ function CareView({
               <RotateCcw size={16} />
             </button>
           )}
-          <button className="circle-button" aria-label="Share plan" style={{ width: "36px", height: "36px" }}>
+          <button className="circle-button" aria-label="Share plan">
             <Share2 size={16} />
           </button>
         </div>

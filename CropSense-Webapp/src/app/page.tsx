@@ -732,11 +732,11 @@ function CareView({
     <div className="view care-view space-y-4">
       {/* Header bar */}
       <header className="care-header pb-1">
-        <div />
-        <div className="text-center">
+        <div className="text-left">
           <span className="eyebrow block">Agronomy Hub</span>
           <h1 className="text-xl font-bold font-outfit text-slate-100">Care & Treatment</h1>
         </div>
+        <div />
         <div className="action-row flex gap-2">
           {topPrediction && !isActiveDiagnosis && (
             <button
@@ -978,11 +978,14 @@ function CareView({
           <div className="section-heading">
             <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400">Disease-Specific Prevention</h2>
           </div>
-          <div className="space-y-2.5">
+          <div className="care-tips">
             {disease.prevention && disease.prevention.length > 0 ? (
               disease.prevention.map((item, idx) => (
-                <article key={idx} className="care-tip flex gap-3 p-3 bg-white/5 border border-white/5 rounded-2xl hover:bg-white/8 transition-colors duration-300">
-                  <span className="p-2 rounded-xl bg-white/8 shrink-0 flex items-center justify-center" style={{ width: "36px", height: "36px" }}>
+                <article
+                  key={idx}
+                  className="care-tip border border-white/5 rounded-2xl hover:bg-white/8 transition-colors duration-300"
+                >
+                  <span>
                     {getPreventionIcon(item.iconName)}
                   </span>
                   <div className="space-y-0.5">

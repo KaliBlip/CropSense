@@ -1002,7 +1002,7 @@ button {
 
 .care-tips {
   display: grid;
-  gap: 10px;
+  gap: 12px;
 }
 
 .care-tip {
@@ -1020,8 +1020,8 @@ button {
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  color: #041006;
-  background: var(--green);
+  background: rgba(255, 255, 255, 0.08);
+  color: inherit;
 }
 
 .care-tip h3 {
